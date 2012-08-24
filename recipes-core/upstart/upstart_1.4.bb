@@ -4,7 +4,7 @@ SUMMARY = "event-based init daemon"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
-DEPENDS = "dbus udev libnih libnih-native"
+DEPENDS = "dbus udev libnih"
 
 SRC_URI = "http://launchpad.net/upstart/1.x/${PV}/+download/${BPN}-${PV}.tar.gz"
 SRC_URI[md5sum] = "3aa9ddf8459b56547a6238aa77c61815"
