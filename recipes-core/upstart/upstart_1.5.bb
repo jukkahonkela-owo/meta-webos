@@ -12,7 +12,7 @@ SRC_URI = "http://upstart.ubuntu.com/download/${PV}/${BPN}-${PV}.tar.gz \
 SRC_URI[md5sum] = "870920a75f8c13f3a3af4c35916805ac"
 SRC_URI[sha256sum] = "bd42f58e1d0f8047c9af0c5ca94f9e91373b65d7c12ab0e82a5f476acd528407"
 
-PR = "r1"
+PR = "r2"
 
 inherit gettext autotools update-alternatives
 
@@ -21,11 +21,27 @@ ALTERNATIVE_LINK_NAME[init] = "${base_sbindir}/init"
 ALTERNATIVE_TARGET[init] = "${base_sbindir}/init.upstart"
 ALTERNATIVE_PRIORITY = "60"
 
+# upstart-sysvcompat provides Sys V Init compatible tools: halt, reboot,
+# shutdown, telinit. These might be needed by other scripts.
+PACKAGES =+ "${PN}-tools ${PN}-sysvcompat ${PN}-sysvcompat-doc"
+FILES_upstart-sysvcompat += " \
+    ${base_sbindir}/reboot* ${base_sbindir}/halt* ${base_sbindir}/poweroff* \
+    ${base_sbindir}/shutdown* ${base_sbindir}/telinit ${base_sbindir}/runlevel \
+    ${sysconfdir}/init/control-alt-delete.conf \
+    ${sysconfdir}/init/rc* \
+    ${sysconfdir}/init.d \
+    ${sysconfdir}/default/rcS \
+"
+
+FILES_upstart-sysvcompat-doc += " \
+    ${mandir}/*/reboot.* ${mandir}/*/halt.* ${mandir}/*/poweroff.* \
+    ${mandir}/*/shutdown.* ${mandir}/*/telinit.* ${mandir}/*/runlevel.* \
+"
+
 # autotools set prefix to /usr, however we want init in /sbin
 bindir = "${base_bindir}"
 sbindir = "${base_sbindir}"
 
-PACKAGES =+ "${PN}-tools"
 # These binaries aren't required but are useful for debugging etc so put them
 # in a separate package
 FILES_${PN}-tools = "${bindir}/init-checkconf ${bindir}/initctl2dot"
