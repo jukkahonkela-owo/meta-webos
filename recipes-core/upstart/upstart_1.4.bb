@@ -17,6 +17,24 @@ ALTERNATIVE_LINK = "${base_sbindir}/init"
 ALTERNATIVE_PATH = "${base_sbindir}/init.upstart"
 ALTERNATIVE_PRIORITY = "60"
 
+# upstart-sysvcompat provides Sys V Init compatible tools: halt, reboot,
+# shutdown, telinit. These might be needed by other scripts.
+PACKAGES =+ "upstart-sysvcompat upstart-sysvcompat-doc"
+FILES_upstart-sysvcompat += " \
+	${base_sbindir}/reboot.* ${base_sbindir}/halt.* ${base_sbindir}/poweroff.* \
+	${base_sbindir}/shutdown.* ${base_sbindir}/telinit ${base_sbindir}/runlevel \
+	${sysconfdir}/event.d/control-alt-delete \
+	${sysconfdir}/event.d/rc* \
+	${sysconfdir}/event.d/sulogin \
+	${sysconfdir}/init.d \
+	${sysconfdir}/default/rcS \
+"
+
+FILES_upstart-sysvcompat-doc += " \
+	${mandir}/*/reboot.* ${mandir}/*/halt.* ${mandir}/*/poweroff.* \
+	${mandir}/*/shutdown.* ${mandir}/*/telinit.* ${mandir}/*/runlevel.* \
+"
+
 # autotools set prefix to /usr, however we want init in /sbin
 bindir = "${base_bindir}"
 sbindir = "${base_sbindir}"
