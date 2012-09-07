@@ -12,9 +12,9 @@ SRC_URI[sha256sum] = "d2b606217bdeae1cfc58193b9cbba58e30c4ee8780fd808a602bfd82c1
 
 inherit gettext autotools update-alternatives
 
-ALTERNATIVE_NAME = "init"
-ALTERNATIVE_LINK = "${base_sbindir}/init"
-ALTERNATIVE_PATH = "${base_sbindir}/init.upstart"
+ALTERNATIVE_upstart = "init"
+ALTERNATIVE_LINK_NAME[init] = "${base_sbindir}/init"
+ALTERNATIVE_TARGET[init] = "${base_sbindir}/init.upstart"
 ALTERNATIVE_PRIORITY = "60"
 
 # autotools set prefix to /usr, however we want init in /sbin
