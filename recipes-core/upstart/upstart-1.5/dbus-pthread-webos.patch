@@ -1,0 +1,74 @@
+diff -pru orig-upstart-1.5/extra/Makefile.am upstart-1.5/extra/Makefile.am
+--- orig-upstart-1.5/extra/Makefile.am	2012-10-03 14:32:08.797803339 +0300
++++ upstart-1.5/extra/Makefile.am	2012-10-03 14:37:13.893278801 +0300
+@@ -35,7 +35,9 @@ upstart_socket_bridge_LDADD = \
+ 	$(LTLIBINTL) \
+ 	$(NIH_LIBS) \
+ 	$(NIH_DBUS_LIBS) \
+-	$(DBUS_LIBS)
++	$(DBUS_LIBS) \
++	-lrt \
++	-lpthread
+ 
+ 
+ if HAVE_UDEV
+@@ -57,7 +59,9 @@ upstart_udev_bridge_LDADD = \
+ 	$(NIH_LIBS) \
+ 	$(NIH_DBUS_LIBS) \
+ 	$(DBUS_LIBS) \
+-	$(UDEV_LIBS)
++	$(UDEV_LIBS) \
++	-lrt \
++	-lpthread
+ 
+ install-data-hook:
+ 	src=`echo upstart-udev-bridge| sed '$(transform)'`.8; \
+diff -pru orig-upstart-1.5/init/Makefile.am upstart-1.5/init/Makefile.am
+--- orig-upstart-1.5/init/Makefile.am	2012-10-03 14:32:08.789803143 +0300
++++ upstart-1.5/init/Makefile.am	2012-10-03 14:35:01.646037866 +0300
+@@ -62,7 +62,8 @@ init_LDADD = \
+ 	$(NIH_LIBS) \
+ 	$(NIH_DBUS_LIBS) \
+ 	$(DBUS_LIBS) \
+-	-lrt
++	-lrt \
++	-lpthread
+ 
+ 
+ com_ubuntu_Upstart_OUTPUTS = \
+diff -pru orig-upstart-1.5/util/Makefile.am upstart-1.5/util/Makefile.am
+--- orig-upstart-1.5/util/Makefile.am	2012-10-03 14:32:08.797803339 +0300
++++ upstart-1.5/util/Makefile.am	2012-10-03 14:33:54.352389079 +0300
+@@ -38,7 +38,9 @@ initctl_LDADD = \
+ 	$(LTLIBINTL) \
+ 	$(NIH_LIBS) \
+ 	$(NIH_DBUS_LIBS) \
+-	$(DBUS_LIBS)
++	$(DBUS_LIBS) \
++	-lrt \
++	-lpthread
+ 
+ reboot_SOURCES = \
+ 	reboot.c \
+@@ -64,7 +66,9 @@ shutdown_LDADD = \
+ 	$(LTLIBINTL) \
+ 	$(NIH_LIBS) \
+ 	$(NIH_DBUS_LIBS) \
+-	$(DBUS_LIBS)
++	$(DBUS_LIBS) \
++	-lrt \
++	-lpthread
+ 
+ telinit_SOURCES = \
+ 	telinit.c \
+@@ -76,7 +80,9 @@ telinit_LDADD = \
+ 	$(LTLIBINTL) \
+ 	$(NIH_LIBS) \
+ 	$(NIH_DBUS_LIBS) \
+-	$(DBUS_LIBS)
++	$(DBUS_LIBS) \
++	-lrt \
++	-lpthread
+ 
+ 
+ com_ubuntu_Upstart_OUTPUTS = \
