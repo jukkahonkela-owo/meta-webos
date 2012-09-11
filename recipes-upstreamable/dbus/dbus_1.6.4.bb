@@ -10,14 +10,17 @@ DEPENDS = "expat virtual/libintl ${@base_contains('DISTRO_FEATURES', 'x11', '${X
 DEPENDS_virtclass-native = "expat-native virtual/libintl-native"
 DEPENDS_virtclass-nativesdk = "expat-nativesdk virtual/libintl-nativesdk virtual/libx11"
 
-PR = "r0"
+PR = "r1"
 
 SRC_URI = "http://dbus.freedesktop.org/releases/dbus/dbus-${PV}.tar.gz \
-           file://dbus-1.conf"
+           file://dbus-1.conf \
+           file://pkgconfig-webos.patch;patch=1"
 SRC_URI[md5sum] = "5ec43dc4554cba638917317b2b4f7640"
 SRC_URI[sha256sum] = "5fba6b7a415d761a843fb8e0aee72db61cf13057a9ef8cdc795e5d369dc74cf1"
 
 inherit useradd autotools pkgconfig gettext
+
+CFLAGS_append = " -fPIC "
 
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "-r netdev"
@@ -46,7 +49,7 @@ FILES_${PN} = "${bindir}/dbus-daemon* \
                ${localstatedir} \
                ${datadir}/dbus-1/services \
                ${datadir}/dbus-1/system-services"
-FILES_${PN}-lib = "${libdir}/lib*.so.*"
+FILES_${PN}-lib = "${base_libdir}/lib*.so.*"
 RRECOMMENDS_${PN}-lib = "${PN}"
 FILES_${PN}-dev += "${libdir}/dbus-1.0/include ${bindir}/dbus-glib-tool"
 
@@ -96,6 +99,19 @@ do_install() {
     # disable dbus-1 sysv script on systemd installs
     # nearly all distros call the initscript plain 'dbus', but OE-core is different
     ln -sf /dev/null ${D}/${systemd_unitdir}/system/dbus-1.service
+}
+
+do_install_append () {
+    if [ ! ${D}${libdir} -ef ${D}${base_libdir} ]; then
+        # Move shared libraries to /lib
+        install -d ${D}${base_libdir}
+        mv ${D}${libdir}/lib*.so* ${D}${base_libdir}
+
+        # Libtool gets confused when part of the library is installed in
+        # ${base_libdir}. It is better not to use the .la -file at all.
+        # This has also been done in Ubuntu 12.04
+        rm ${D}${libdir}/libdbus-1.la
+    fi
 }
 
 do_install_virtclass-native() {

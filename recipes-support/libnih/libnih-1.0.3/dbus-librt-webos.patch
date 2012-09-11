@@ -1,0 +1,14 @@
+diff -pru orig-libnih-1.0.3/nih-dbus-tool/Makefile.am libnih-1.0.3/nih-dbus-tool/Makefile.am
+--- orig-libnih-1.0.3/nih-dbus-tool/Makefile.am	2012-10-03 13:55:01.991294492 +0300
++++ libnih-1.0.3/nih-dbus-tool/Makefile.am	2012-10-03 13:55:13.831586153 +0300
+@@ -38,7 +38,9 @@ nih_dbus_tool_LDADD = \
+ 	../nih/libnih.la \
+ 	$(LTLIBINTL) \
+ 	$(EXPAT_LIBS) \
+-	$(DBUS_LIBS)
++	$(DBUS_LIBS) \
++	-lrt \
++	-lpthread
+ 
+ 
+ TESTS = \

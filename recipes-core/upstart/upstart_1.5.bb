@@ -6,11 +6,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 
 DEPENDS = "dbus udev libnih"
 
-SRC_URI = "http://upstart.ubuntu.com/download/${PV}/${BPN}-${PV}.tar.gz"
+SRC_URI = "http://upstart.ubuntu.com/download/${PV}/${BPN}-${PV}.tar.gz \
+           file://dbus-pthread-webos.patch"
 SRC_URI[md5sum] = "870920a75f8c13f3a3af4c35916805ac"
 SRC_URI[sha256sum] = "bd42f58e1d0f8047c9af0c5ca94f9e91373b65d7c12ab0e82a5f476acd528407"
 
-PR = "r1"
+PR = "r2"
 
 inherit gettext autotools update-alternatives
 

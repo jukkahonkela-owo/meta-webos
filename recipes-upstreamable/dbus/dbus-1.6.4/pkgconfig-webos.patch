@@ -1,0 +1,9 @@
+diff -pru orig-dbus-1.6.4/dbus-1.pc.in dbus-1.6.4/dbus-1.pc.in
+--- orig-dbus-1.6.4/dbus-1.pc.in	2012-09-12 10:06:26.456030081 +0300
++++ dbus-1.6.4/dbus-1.pc.in	2012-09-12 10:07:13.213226319 +0300
+@@ -14,4 +14,4 @@ Description: Free desktop message bus
+ Version: @VERSION@
+ Libs: -L${libdir} -ldbus-1
+ Libs.private: @LIBDBUS_LIBS@
+-Cflags: -I${includedir}/dbus-1.0 -I${libdir}/dbus-1.0/include @DBUS_STATIC_BUILD_CPPFLAGS@
++Cflags: -I${includedir}/dbus-1.0 -I${exec_prefix}/lib/dbus-1.0/include @DBUS_STATIC_BUILD_CPPFLAGS@
