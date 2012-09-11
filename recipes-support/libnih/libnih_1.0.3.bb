@@ -14,4 +14,5 @@ SRC_URI[sha256sum] = "897572df7565c0a90a81532671e23c63f99b4efde2eecbbf11e7857fbc
 
 inherit gettext autotools
 
+EXTRA_OECONF = "--libdir=${base_libdir}"
 BBCLASSEXTEND="native"
