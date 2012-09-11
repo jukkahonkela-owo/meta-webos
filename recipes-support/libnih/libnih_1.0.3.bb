@@ -12,8 +12,9 @@ SRC_URI = "http://launchpad.net/libnih/1.0/${PV}/+download/${BPN}-${PV}.tar.gz \
 SRC_URI[md5sum] = "db7990ce55e01daffe19006524a1ccb0"
 SRC_URI[sha256sum] = "897572df7565c0a90a81532671e23c63f99b4efde2eecbbf11e7857fbc61f405"
 
-PR = "r0"
+PR = "r1"
 
 inherit gettext autotools
 
+EXTRA_OECONF = "--libdir=${base_libdir}"
 BBCLASSEXTEND="native"
