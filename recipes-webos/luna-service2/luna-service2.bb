@@ -40,5 +40,5 @@ do_install_append() {
 EXTRA_OECMAKE += "-DTARGET_CORE_OS:STRING=${WEBOS_TARGET_CORE_OS}"
 
 WEBOS_GIT_TAG = "submissions/${WEBOS_SUBMISSION}"
-SRC_URI = "${OPENWEBOS_GIT_REPO}/${PN};tag=${WEBOS_GIT_TAG};protocol=git"
+SRC_URI = "${OPENWEBOS_GIT_REPO}/${PN};tag=${WEBOS_GIT_TAG};protocol=git file://upstart15.patch"
 S = "${WORKDIR}/git"

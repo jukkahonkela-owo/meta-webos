@@ -1,0 +1,332 @@
+From 833ca80aab788acc8731f7e9212890a09b06ae3c Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 4 Oct 2012 12:37:11 +0300
+Subject: [PATCH] Making compatible with usptart 1.5
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ CMakeLists.txt                        |    4 ++--
+ upstart/CMakeLists.txt                |    8 ++++----
+ upstart/ls-hubd_private               |   24 ------------------------
+ upstart/ls-hubd_private.conf          |   24 ++++++++++++++++++++++++
+ upstart/ls-hubd_private_watchdog      |   26 --------------------------
+ upstart/ls-hubd_private_watchdog.conf |   26 ++++++++++++++++++++++++++
+ upstart/ls-hubd_public                |   24 ------------------------
+ upstart/ls-hubd_public.conf           |   24 ++++++++++++++++++++++++
+ upstart/ls-hubd_public_watchdog       |   26 --------------------------
+ upstart/ls-hubd_public_watchdog.conf  |   26 ++++++++++++++++++++++++++
+ utils/ls-control                      |    4 ++--
+ 11 files changed, 108 insertions(+), 108 deletions(-)
+ delete mode 100644 upstart/ls-hubd_private
+ create mode 100644 upstart/ls-hubd_private.conf
+ delete mode 100644 upstart/ls-hubd_private_watchdog
+ create mode 100644 upstart/ls-hubd_private_watchdog.conf
+ delete mode 100644 upstart/ls-hubd_public
+ create mode 100644 upstart/ls-hubd_public.conf
+ delete mode 100644 upstart/ls-hubd_public_watchdog
+ create mode 100644 upstart/ls-hubd_public_watchdog.conf
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7ce6568..7b0f996 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -132,7 +132,7 @@ if (TARGET_DEVICE OR TARGET_EMULATOR)
+     set(CONF_INSTALL_PATH "/etc/ls2")
+ 
+     # Install upstart jobs using full path
+-    set(UPSTART_INSTALL_PATH "/etc/event.d")
++    set(UPSTART_INSTALL_PATH "/etc/init")
+ 
+ else ()
+     # Desktop
+@@ -140,7 +140,7 @@ else ()
+ 
+     # Install relative to CMAKE_INSTALL_PREFIX 
+     set(CONF_INSTALL_PATH "etc/ls2")
+-    set(UPSTART_INSTALL_PATH "etc/event.d")
++    set(UPSTART_INSTALL_PATH "etc/init")
+ endif ()
+ 
+ # These variables are meant to be used by CMakeLists.txt in subdirectories and
+diff --git a/upstart/CMakeLists.txt b/upstart/CMakeLists.txt
+index 23dd7f9..d4ef7d4 100644
+--- a/upstart/CMakeLists.txt
++++ b/upstart/CMakeLists.txt
+@@ -20,7 +20,7 @@
+ # luna-service2/upstart/CMakeLists.txt
+ #
+ 
+-install(FILES ls-hubd_private DESTINATION ${UPSTART_INSTALL_PATH})
+-install(FILES ls-hubd_private_watchdog DESTINATION ${UPSTART_INSTALL_PATH})
+-install(FILES ls-hubd_public DESTINATION ${UPSTART_INSTALL_PATH})
+-install(FILES ls-hubd_public_watchdog DESTINATION ${UPSTART_INSTALL_PATH})
++install(FILES ls-hubd_private.conf DESTINATION ${UPSTART_INSTALL_PATH})
++install(FILES ls-hubd_private_watchdog.conf DESTINATION ${UPSTART_INSTALL_PATH})
++install(FILES ls-hubd_public.conf DESTINATION ${UPSTART_INSTALL_PATH})
++install(FILES ls-hubd_public_watchdog.conf DESTINATION ${UPSTART_INSTALL_PATH})
+diff --git a/upstart/ls-hubd_private b/upstart/ls-hubd_private
+deleted file mode 100644
+index 6aff8e1..0000000
+--- a/upstart/ls-hubd_private
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# @@@LICENSE
+-#
+-#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on stopped bootmisc
+-stop on started start_update
+-
+-script
+-    /usr/bin/ls-hubd --conf /etc/ls2/ls-private.conf --pmloglib
+-end script
+diff --git a/upstart/ls-hubd_private.conf b/upstart/ls-hubd_private.conf
+new file mode 100644
+index 0000000..6aff8e1
+--- /dev/null
++++ b/upstart/ls-hubd_private.conf
+@@ -0,0 +1,24 @@
++# @@@LICENSE
++#
++#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on stopped bootmisc
++stop on started start_update
++
++script
++    /usr/bin/ls-hubd --conf /etc/ls2/ls-private.conf --pmloglib
++end script
+diff --git a/upstart/ls-hubd_private_watchdog b/upstart/ls-hubd_private_watchdog
+deleted file mode 100644
+index 22c0dc7..0000000
+--- a/upstart/ls-hubd_private_watchdog
++++ /dev/null
+@@ -1,26 +0,0 @@
+-# @@@LICENSE
+-#
+-#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on stopping ls-hubd_private
+-
+-script
+-    logger "ls-hubd_private died, EXIT_STATUS: $EXIT_STATUS, EXIT_SIGNAL: $EXIT_SIGNAL"
+-    if [ "x${EXIT_STATUS}" != "x" ]; then
+-        /usr/sbin/reboot_ls-hubd_if.sh ${EXIT_STATUS} ls-hubd_private
+-    fi
+-end script
+diff --git a/upstart/ls-hubd_private_watchdog.conf b/upstart/ls-hubd_private_watchdog.conf
+new file mode 100644
+index 0000000..22c0dc7
+--- /dev/null
++++ b/upstart/ls-hubd_private_watchdog.conf
+@@ -0,0 +1,26 @@
++# @@@LICENSE
++#
++#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on stopping ls-hubd_private
++
++script
++    logger "ls-hubd_private died, EXIT_STATUS: $EXIT_STATUS, EXIT_SIGNAL: $EXIT_SIGNAL"
++    if [ "x${EXIT_STATUS}" != "x" ]; then
++        /usr/sbin/reboot_ls-hubd_if.sh ${EXIT_STATUS} ls-hubd_private
++    fi
++end script
+diff --git a/upstart/ls-hubd_public b/upstart/ls-hubd_public
+deleted file mode 100644
+index 8116742..0000000
+--- a/upstart/ls-hubd_public
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# @@@LICENSE
+-#
+-#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on ls-hubd_private-ready
+-stop on started start_update
+-
+-script
+-    /usr/bin/ls-hubd --public --conf /etc/ls2/ls-public.conf --pmloglib
+-end script
+diff --git a/upstart/ls-hubd_public.conf b/upstart/ls-hubd_public.conf
+new file mode 100644
+index 0000000..8116742
+--- /dev/null
++++ b/upstart/ls-hubd_public.conf
+@@ -0,0 +1,24 @@
++# @@@LICENSE
++#
++#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on ls-hubd_private-ready
++stop on started start_update
++
++script
++    /usr/bin/ls-hubd --public --conf /etc/ls2/ls-public.conf --pmloglib
++end script
+diff --git a/upstart/ls-hubd_public_watchdog b/upstart/ls-hubd_public_watchdog
+deleted file mode 100644
+index 4f9ee3e..0000000
+--- a/upstart/ls-hubd_public_watchdog
++++ /dev/null
+@@ -1,26 +0,0 @@
+-# @@@LICENSE
+-#
+-#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on stopping ls-hubd_public
+-
+-script
+-    logger "ls-hubd_public died, EXIT_STATUS: $EXIT_STATUS, EXIT_SIGNAL: $EXIT_SIGNAL"
+-    if [ "x${EXIT_STATUS}" != "x" ]; then
+-        /usr/sbin/reboot_ls-hubd_if.sh ${EXIT_STATUS} ls-hubd_public
+-    fi
+-end script
+diff --git a/upstart/ls-hubd_public_watchdog.conf b/upstart/ls-hubd_public_watchdog.conf
+new file mode 100644
+index 0000000..4f9ee3e
+--- /dev/null
++++ b/upstart/ls-hubd_public_watchdog.conf
+@@ -0,0 +1,26 @@
++# @@@LICENSE
++#
++#      Copyright (c) 2008-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on stopping ls-hubd_public
++
++script
++    logger "ls-hubd_public died, EXIT_STATUS: $EXIT_STATUS, EXIT_SIGNAL: $EXIT_SIGNAL"
++    if [ "x${EXIT_STATUS}" != "x" ]; then
++        /usr/sbin/reboot_ls-hubd_if.sh ${EXIT_STATUS} ls-hubd_public
++    fi
++end script
+diff --git a/utils/ls-control b/utils/ls-control
+index 787b254..995b87d 100755
+--- a/utils/ls-control
++++ b/utils/ls-control
+@@ -17,8 +17,8 @@
+ #
+ # LICENSE@@@
+ 
+-UPSTART_PUB=/etc/event.d/ls-hubd_public
+-UPSTART_PRV=/etc/event.d/ls-hubd_private
++UPSTART_PUB=/etc/init/ls-hubd_public
++UPSTART_PRV=/etc/init/ls-hubd_private
+ 
+ TETHER="false"
+ TETHER_STATUS="disabled"
+-- 
+1.7.9.5
+
