@@ -1,0 +1,100 @@
+From 022eeecff2b0cf4af8e12f72b146e7662c3ba6cc Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 4 Oct 2012 15:52:49 +0300
+Subject: [PATCH] Upstart 1.5 compatibility changes
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/db8.conf.in    |   16 ++++++++++++++++
+ files/launch/db8.in         |   16 ----------------
+ files/launch/tempdb.conf.in |   12 ++++++++++++
+ files/launch/tempdb.in      |   12 ------------
+ 4 files changed, 28 insertions(+), 28 deletions(-)
+ create mode 100644 files/launch/db8.conf.in
+ delete mode 100644 files/launch/db8.in
+ create mode 100644 files/launch/tempdb.conf.in
+ delete mode 100644 files/launch/tempdb.in
+
+diff --git a/files/launch/db8.conf.in b/files/launch/db8.conf.in
+new file mode 100644
+index 0000000..bdd0644
+--- /dev/null
++++ b/files/launch/db8.conf.in
+@@ -0,0 +1,16 @@
++# -*- mode: conf; -*-
++
++start on stopped finish
++stop on started start_update
++
++respawn
++
++script
++	# move logs
++	if [ -d @WEBOS_INSTALL_LOCALSTATEDIR@/dblog ]; then
++		mv @WEBOS_INSTALL_LOCALSTATEDIR@/dblog/* @WEBOS_INSTALL_LOCALSTATEDIR@/db
++		rmdir @WEBOS_INSTALL_LOCALSTATEDIR@/dblog
++	fi
++
++	exec @WEBOS_INSTALL_SBINDIR@/mojodb-luna -c @WEBOS_INSTALL_WEBOS_SYSCONFDIR@/mojodb.conf @WEBOS_INSTALL_LOCALSTATEDIR@/db
++end script
+diff --git a/files/launch/db8.in b/files/launch/db8.in
+deleted file mode 100644
+index bdd0644..0000000
+--- a/files/launch/db8.in
++++ /dev/null
+@@ -1,16 +0,0 @@
+-# -*- mode: conf; -*-
+-
+-start on stopped finish
+-stop on started start_update
+-
+-respawn
+-
+-script
+-	# move logs
+-	if [ -d @WEBOS_INSTALL_LOCALSTATEDIR@/dblog ]; then
+-		mv @WEBOS_INSTALL_LOCALSTATEDIR@/dblog/* @WEBOS_INSTALL_LOCALSTATEDIR@/db
+-		rmdir @WEBOS_INSTALL_LOCALSTATEDIR@/dblog
+-	fi
+-
+-	exec @WEBOS_INSTALL_SBINDIR@/mojodb-luna -c @WEBOS_INSTALL_WEBOS_SYSCONFDIR@/mojodb.conf @WEBOS_INSTALL_LOCALSTATEDIR@/db
+-end script
+diff --git a/files/launch/tempdb.conf.in b/files/launch/tempdb.conf.in
+new file mode 100644
+index 0000000..69226fc
+--- /dev/null
++++ b/files/launch/tempdb.conf.in
+@@ -0,0 +1,12 @@
++# -*- mode: conf; -*-
++
++start on stopped finish
++
++
++script
++if [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/db/temp ]; then
++#	rm -r @WEBOS_INSTALL_LOCALSTATEDIR@/db/temp
++fi
++end script
++
++
+diff --git a/files/launch/tempdb.in b/files/launch/tempdb.in
+deleted file mode 100644
+index 69226fc..0000000
+--- a/files/launch/tempdb.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-# -*- mode: conf; -*-
+-
+-start on stopped finish
+-
+-
+-script
+-if [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/db/temp ]; then
+-#	rm -r @WEBOS_INSTALL_LOCALSTATEDIR@/db/temp
+-fi
+-end script
+-
+-
+-- 
+1.7.9.5
+

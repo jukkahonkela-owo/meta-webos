@@ -1,0 +1,118 @@
+From 8f6ca70aa240b33b6b02a3baa112f48f9c04254a Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 4 Oct 2012 14:25:28 +0300
+Subject: [PATCH] Upstart 1.5 compatibility changes
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/sleepd.conf.in |   45 +++++++++++++++++++++++++++++++++++++++++++
+ files/launch/sleepd.in      |   45 -------------------------------------------
+ 2 files changed, 45 insertions(+), 45 deletions(-)
+ create mode 100644 files/launch/sleepd.conf.in
+ delete mode 100644 files/launch/sleepd.in
+
+diff --git a/files/launch/sleepd.conf.in b/files/launch/sleepd.conf.in
+new file mode 100644
+index 0000000..eb13fc1
+--- /dev/null
++++ b/files/launch/sleepd.conf.in
+@@ -0,0 +1,45 @@
++# @@@LICENSE
++#
++#      Copyright (c) 2011-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++
++# -*- mode: conf; -*-
++# sleepd
++
++start on stopped finish
++
++# Stop when the Software Update tool is about to install an update.  The tool
++# uses upstart to restart jobs when the installation is complete.
++stop on started start_update
++
++respawn
++
++pre-start script
++    CONF_DIR="@WEBOS_INSTALL_LOCALSTATEDIR@/preferences/com.palm.sleep"
++    CONF_FILE="${CONF_DIR}/sleepd.conf"
++    DEFAULT_CONF_FILE="@WEBOS_INSTALL_DEFAULTCONFDIR@/sleepd.conf"
++    TMP_FILE="${CONF_DIR}/sleepd.tmp"
++    if [ ! -f ${CONF_FILE} ]; then
++        mkdir -p ${CONF_DIR} || true
++        cp ${DEFAULT_CONF_FILE} ${TMP_FILE} || true
++        sync || true
++        mv ${TMP_FILE} ${CONF_FILE} || true
++    fi
++end script
++    
++service
++exec @WEBOS_INSTALL_SBINDIR@/sleepd
+diff --git a/files/launch/sleepd.in b/files/launch/sleepd.in
+deleted file mode 100644
+index eb13fc1..0000000
+--- a/files/launch/sleepd.in
++++ /dev/null
+@@ -1,45 +0,0 @@
+-# @@@LICENSE
+-#
+-#      Copyright (c) 2011-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-
+-# -*- mode: conf; -*-
+-# sleepd
+-
+-start on stopped finish
+-
+-# Stop when the Software Update tool is about to install an update.  The tool
+-# uses upstart to restart jobs when the installation is complete.
+-stop on started start_update
+-
+-respawn
+-
+-pre-start script
+-    CONF_DIR="@WEBOS_INSTALL_LOCALSTATEDIR@/preferences/com.palm.sleep"
+-    CONF_FILE="${CONF_DIR}/sleepd.conf"
+-    DEFAULT_CONF_FILE="@WEBOS_INSTALL_DEFAULTCONFDIR@/sleepd.conf"
+-    TMP_FILE="${CONF_DIR}/sleepd.tmp"
+-    if [ ! -f ${CONF_FILE} ]; then
+-        mkdir -p ${CONF_DIR} || true
+-        cp ${DEFAULT_CONF_FILE} ${TMP_FILE} || true
+-        sync || true
+-        mv ${TMP_FILE} ${CONF_FILE} || true
+-    fi
+-end script
+-    
+-service
+-exec @WEBOS_INSTALL_SBINDIR@/sleepd
+-- 
+1.7.9.5
+

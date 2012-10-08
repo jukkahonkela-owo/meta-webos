@@ -61,8 +61,8 @@ do_install() {
         cp -rf com.palm.service.accounts/tempdb/permissions/* ${D}/etc/palm/tempdb/permissions/ 2> /dev/null || true
 
 # install account service upstart file
-        install -d ${D}/etc/event.d 2> /dev/null || true
-        install -m 644 ${S}/com.palm.service.accounts/files/etc/event.d/createLocalAccount ${D}/etc/event.d/ 
+        install -d ${D}/etc/init 2> /dev/null || true
+        install -m 644 ${S}/com.palm.service.accounts/files/etc/event.d/createLocalAccount ${D}/etc/init/createLocalAccount.conf 
 }
 
 FILES_${PN} += "/usr/palm/services /etc/palm/ /etc/event.d /usr/share/ /usr/palm/public"
