@@ -69,8 +69,8 @@ do_install_prepend() {
 }
 
 do_install_append() {
-        install -d ${D}${sysconfdir}/event.d
-        install -m 555 -p ${S}/browserserver ${D}${sysconfdir}/event.d/browserserver
+        install -d ${D}${sysconfdir}/init
+        install -m 555 -p ${S}/browserserver ${D}${sysconfdir}/init/browserserver.conf
 
         install -d ${D}${sysconfdir}/palm
 

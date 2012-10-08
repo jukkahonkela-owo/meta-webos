@@ -1,0 +1,28 @@
+From 5a893a3dfb271939fcf00da3023be1e12a545676 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Mon, 1 Oct 2012 15:17:22 +0300
+Subject: [PATCH] Changed the UPSTARTCONFIG variable to point into (/etc/)
+ init instead of old event.d which is deprecated by new
+ upstart
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ webOS/webOS.cmake |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/webOS/webOS.cmake b/webOS/webOS.cmake
+index 5187cd6..97d2296 100644
+--- a/webOS/webOS.cmake
++++ b/webOS/webOS.cmake
+@@ -324,7 +324,7 @@ macro(_webos_init_install_vars)
+ 	_webos_set_from_env(WEBOS_INSTALL_PRESERVEDTMPDIR    webos_preservedtmpdir    ${WEBOS_INSTALL_LOCALSTATEDIR}/tmp)
+ 	_webos_set_from_env(WEBOS_INSTALL_RUNTIMEINFODIR     webos_runtimeinfodir     ${WEBOS_INSTALL_LOCALSTATEDIR}/run)
+ 	# This one will eventually default to ${WEBOS_INSTALL_SYSCONFDIR}/init
+-	_webos_set_from_env(WEBOS_INSTALL_UPSTARTCONFDIR     webos_upstartconfdir     ${WEBOS_INSTALL_SYSCONFDIR}/event.d)
++	_webos_set_from_env(WEBOS_INSTALL_UPSTARTCONFDIR     webos_upstartconfdir     ${WEBOS_INSTALL_SYSCONFDIR}/init)
+ 
+ 	# Variables for webOS additions to the FS hierarchy
+ 	_webos_set_from_env(WEBOS_INSTALL_CRYPTOFSDIR        webos_cryptofsdir        ${WEBOS_INSTALL_MEDIADIR}/cryptofs)
+-- 
+1.7.9.5
+
