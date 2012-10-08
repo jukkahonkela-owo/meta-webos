@@ -7,7 +7,7 @@ SECTION = "webos/base"
 
 DEPENDS = "libxml2 luna-service2 glib-2.0 cjson sqlite3 "
 
-PR = "r3"
+PR = "r4"
 
 inherit webos_component
 inherit webos_public_repo
@@ -16,7 +16,7 @@ inherit webos_cmake
 inherit webos_system_bus
 
 WEBOS_GIT_TAG = "submissions/${WEBOS_SUBMISSION}"
-SRC_URI = "${OPENWEBOS_GIT_REPO}/${PN};tag=${WEBOS_GIT_TAG};protocol=git"
+SRC_URI = "${OPENWEBOS_GIT_REPO}/${PN};tag=${WEBOS_GIT_TAG};protocol=git file://upstart15.patch"
 S = "${WORKDIR}/git"
 
 do_install_append() {

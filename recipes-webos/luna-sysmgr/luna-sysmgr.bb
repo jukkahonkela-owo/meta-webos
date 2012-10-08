@@ -14,7 +14,7 @@ RDEPENDS_${PN} = "ptmalloc3"
 RDEPENDS_${PN} += "util-linux"
 #RDEPENDS_${PN} += "jail" #TODO
 
-PR = "r3"
+PR = "r4"
 
 # Don't uncomment until all of the do_*() tasks have been moved out of the recipe
 #inherit webos_component
@@ -28,6 +28,7 @@ inherit webos_machine_dep
 WEBOS_GIT_TAG = "${WEBOS_SUBMISSION}"
 SRC_URI = "${OPENWEBOS_GIT_REPO}/${PN};tag=${WEBOS_GIT_TAG};protocol=git"
 S = "${WORKDIR}/git"
+
 
 EXTRA_OEMAKE = " MAKEFLAGS= "
 
@@ -179,10 +180,10 @@ do_install() {
 	install -d ${D}/usr/palm/sounds
 	install -m 644 sounds/* ${D}/usr/palm/sounds
 
-	# install into event.d so we run.
-	install -d ${D}${sysconfdir}/event.d
-	install -m 644 LunaSysMgr.upstart ${D}${sysconfdir}/event.d/LunaSysMgr
-	install -m 644 LunaReady.upstart ${D}${sysconfdir}/event.d/LunaReady
+	# install into init so we run.
+	install -d ${D}${sysconfdir}/init
+	install -m 644 LunaSysMgr.upstart ${D}${sysconfdir}/init/LunaSysMgr.conf
+	install -m 644 LunaReady.upstart ${D}${sysconfdir}/init/LunaReady.conf
 
 	# install the luna.conf file if it exists in the source
 	if [ -f conf/luna.conf ]

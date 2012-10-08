@@ -1,0 +1,88 @@
+From c1aee59fcd8ca862be4884ebcbbda7bd8cdbb425 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 4 Oct 2012 14:28:45 +0300
+Subject: [PATCH] Upstart 1.5 compatibility changes
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/filecache.conf.in |   30 ++++++++++++++++++++++++++++++
+ files/launch/filecache.in      |   30 ------------------------------
+ 2 files changed, 30 insertions(+), 30 deletions(-)
+ create mode 100644 files/launch/filecache.conf.in
+ delete mode 100644 files/launch/filecache.in
+
+diff --git a/files/launch/filecache.conf.in b/files/launch/filecache.conf.in
+new file mode 100644
+index 0000000..35d3f6c
+--- /dev/null
++++ b/files/launch/filecache.conf.in
+@@ -0,0 +1,30 @@
++# -*- mode: conf; -*-
++# @@@LICENSE
++#
++#      Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on stopped finish
++stop on started start_update
++
++respawn
++exec @WEBOS_INSTALL_SBINDIR@/filecache -c {\"log\":{\"appender\":{\"type\":\"syslog\"},\"levels\":{\"default\":\"warning\"}}}
++
++pre-start script
++  if grep -qs "qemux86" /etc/hostname ; then
++    mount / -oremount,user_xattr 
++  fi      
++end script
+diff --git a/files/launch/filecache.in b/files/launch/filecache.in
+deleted file mode 100644
+index 35d3f6c..0000000
+--- a/files/launch/filecache.in
++++ /dev/null
+@@ -1,30 +0,0 @@
+-# -*- mode: conf; -*-
+-# @@@LICENSE
+-#
+-#      Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on stopped finish
+-stop on started start_update
+-
+-respawn
+-exec @WEBOS_INSTALL_SBINDIR@/filecache -c {\"log\":{\"appender\":{\"type\":\"syslog\"},\"levels\":{\"default\":\"warning\"}}}
+-
+-pre-start script
+-  if grep -qs "qemux86" /etc/hostname ; then
+-    mount / -oremount,user_xattr 
+-  fi      
+-end script
+-- 
+1.7.9.5
+

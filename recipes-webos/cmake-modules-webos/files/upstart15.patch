@@ -1,0 +1,56 @@
+From 5a893a3dfb271939fcf00da3023be1e12a545676 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Mon, 1 Oct 2012 15:17:22 +0300
+Subject: [PATCH 1/2] Changed the UPSTARTCONFIG variable to point into (/etc/)
+ init instead of old event.d which is deprecated by new
+ upstart
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ webOS/webOS.cmake |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/webOS/webOS.cmake b/webOS/webOS.cmake
+index 5187cd6..97d2296 100644
+--- a/webOS/webOS.cmake
++++ b/webOS/webOS.cmake
+@@ -324,7 +324,7 @@ macro(_webos_init_install_vars)
+ 	_webos_set_from_env(WEBOS_INSTALL_PRESERVEDTMPDIR    webos_preservedtmpdir    ${WEBOS_INSTALL_LOCALSTATEDIR}/tmp)
+ 	_webos_set_from_env(WEBOS_INSTALL_RUNTIMEINFODIR     webos_runtimeinfodir     ${WEBOS_INSTALL_LOCALSTATEDIR}/run)
+ 	# This one will eventually default to ${WEBOS_INSTALL_SYSCONFDIR}/init
+-	_webos_set_from_env(WEBOS_INSTALL_UPSTARTCONFDIR     webos_upstartconfdir     ${WEBOS_INSTALL_SYSCONFDIR}/event.d)
++	_webos_set_from_env(WEBOS_INSTALL_UPSTARTCONFDIR     webos_upstartconfdir     ${WEBOS_INSTALL_SYSCONFDIR}/init)
+ 
+ 	# Variables for webOS additions to the FS hierarchy
+ 	_webos_set_from_env(WEBOS_INSTALL_CRYPTOFSDIR        webos_cryptofsdir        ${WEBOS_INSTALL_MEDIADIR}/cryptofs)
+-- 
+1.7.9.5
+
+
+From e629b719ba39e77205e8d142551dd2930c1cf405 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Tue, 9 Oct 2012 10:08:33 +0300
+Subject: [PATCH 2/2] Need to modify the cmake script to take care of .conf
+ files properly in case of daemon installs
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ webOS/webOS.cmake |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/webOS/webOS.cmake b/webOS/webOS.cmake
+index 97d2296..ef83ddc 100644
+--- a/webOS/webOS.cmake
++++ b/webOS/webOS.cmake
+@@ -621,7 +621,7 @@ function(webos_build_daemon)
+ 	if(IS_DIRECTORY ${webos_daemon_LAUNCH})
+ 		webos_build_configured_tree(${webos_daemon_LAUNCH} UPSTARTCONFDIR)
+ 	else()
+-		webos_build_configured_file(${webos_daemon_LAUNCH} UPSTARTCONFDIR "")
++		webos_build_configured_file(${webos_daemon_LAUNCH}.conf UPSTARTCONFDIR "")
+ 	endif()
+ endfunction()
+ 
+-- 
+1.7.9.5
+

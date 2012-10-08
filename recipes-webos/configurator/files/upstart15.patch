@@ -1,0 +1,186 @@
+From c794c91cc1daca1577d00491ff3b52bc38cd2b5c Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 4 Oct 2012 15:40:28 +0300
+Subject: [PATCH] Upstart 1.5 compatibility changes
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/configurator-async.conf.in |   14 ++++++++
+ files/launch/configurator-async.in      |   14 --------
+ files/launch/configurator.conf.in       |   57 +++++++++++++++++++++++++++++++
+ files/launch/configurator.in            |   57 -------------------------------
+ 4 files changed, 71 insertions(+), 71 deletions(-)
+ create mode 100644 files/launch/configurator-async.conf.in
+ delete mode 100644 files/launch/configurator-async.in
+ create mode 100644 files/launch/configurator.conf.in
+ delete mode 100644 files/launch/configurator.in
+
+diff --git a/files/launch/configurator-async.conf.in b/files/launch/configurator-async.conf.in
+new file mode 100644
+index 0000000..35ccf92
+--- /dev/null
++++ b/files/launch/configurator-async.conf.in
+@@ -0,0 +1,14 @@
++# AM may crash or be stopped manually.  Need to re-register the activities
++# in this case
++start on activitymanager-ready
++
++# Need to make sure that AM doesn't hang when it emits it's upstart signal
++# This is actually not safe, as it can cause upstart to eat the events.
++# The Activity Manager will call the configurator directly.
++service
++
++# The file cache & db kinds need to be configured first
++script
++	logger -s "Configuring activities asynchronously"
++	@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
++end script
+diff --git a/files/launch/configurator-async.in b/files/launch/configurator-async.in
+deleted file mode 100644
+index 35ccf92..0000000
+--- a/files/launch/configurator-async.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-# AM may crash or be stopped manually.  Need to re-register the activities
+-# in this case
+-start on activitymanager-ready
+-
+-# Need to make sure that AM doesn't hang when it emits it's upstart signal
+-# This is actually not safe, as it can cause upstart to eat the events.
+-# The Activity Manager will call the configurator directly.
+-service
+-
+-# The file cache & db kinds need to be configured first
+-script
+-	logger -s "Configuring activities asynchronously"
+-	@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
+-end script
+diff --git a/files/launch/configurator.conf.in b/files/launch/configurator.conf.in
+new file mode 100644
+index 0000000..7fa2978
+--- /dev/null
++++ b/files/launch/configurator.conf.in
+@@ -0,0 +1,57 @@
++# not ideal - would like to start this on started mojodb and filecache-ready
++# but our upstart doesn't support this (0.5 needed AFAIK)
++start on stopped finish
++
++# AM may crash or be stopped manually.  Need to re-register the activities
++# in this case
++# AM now starts the configurator directly though a service call
++# start on activitymanager-ready
++
++# Some activities can only be registered once first use has completed (otherwise activity
++# manager will launch apps during first use when they don't expect to be running).
++start on first-use-finished
++start on first-use-profile-created
++
++# Need to make sure that AM doesn't hang when it emits it's upstart signal
++# This is actually not safe, as it can cause upstart to eat the events.
++# The Activity Manager will call the configurator directly.
++# service
++
++# The file cache & db kinds need to be configured first
++script
++	if [ "x$UPSTART_EVENT" = "xstopped" ]; then
++		# This is the "stopped finish" event - first pass we register file cache and dbkinds
++		logger -s "Configuring dbkinds & filecache"
++		@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["dbkinds","filecache"]}'
++		# This has to happen *after* the kinds are created.
++		logger -s "Configuring dbpermissions"
++		@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["dbpermissions"]}'
++	fi
++
++	# Notify it is safe to run the activity manager if it hasn't started already
++	initctl emit datastore-initialized
++
++	# Now we configure activities doesn't matter if it hasn't started yet
++	# Rely on ls2 delivering the messages once it does
++
++	# The only time we care about the first use distiction is when we're registering 
++	# activities - behaviour is the same - just the flag is different
++	#
++	# Don't do this.  The Activity Manager will call the configurator directly
++	# to work around the upstart issue.
++
++	#POST_FIRST_USE=0
++	#if [ -f "/var/luna/preferences/ran-first-use" ] && [ -f "/var/luna/preferences/first-use-profile-created" ]; then
++	#	POST_FIRST_USE=1
++	#fi
++
++	#if [ $POST_FIRST_USE -eq 1 ]; then
++	#	logger -s "Configuring activities"
++	#	luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
++	#else
++	#	logger -s "Configuring activities prior to first-use"
++	#	luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities-first-use"]}'
++	#fi
++	logger -s "Configuring activities"
++	@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
++end script
+diff --git a/files/launch/configurator.in b/files/launch/configurator.in
+deleted file mode 100644
+index 7fa2978..0000000
+--- a/files/launch/configurator.in
++++ /dev/null
+@@ -1,57 +0,0 @@
+-# not ideal - would like to start this on started mojodb and filecache-ready
+-# but our upstart doesn't support this (0.5 needed AFAIK)
+-start on stopped finish
+-
+-# AM may crash or be stopped manually.  Need to re-register the activities
+-# in this case
+-# AM now starts the configurator directly though a service call
+-# start on activitymanager-ready
+-
+-# Some activities can only be registered once first use has completed (otherwise activity
+-# manager will launch apps during first use when they don't expect to be running).
+-start on first-use-finished
+-start on first-use-profile-created
+-
+-# Need to make sure that AM doesn't hang when it emits it's upstart signal
+-# This is actually not safe, as it can cause upstart to eat the events.
+-# The Activity Manager will call the configurator directly.
+-# service
+-
+-# The file cache & db kinds need to be configured first
+-script
+-	if [ "x$UPSTART_EVENT" = "xstopped" ]; then
+-		# This is the "stopped finish" event - first pass we register file cache and dbkinds
+-		logger -s "Configuring dbkinds & filecache"
+-		@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["dbkinds","filecache"]}'
+-		# This has to happen *after* the kinds are created.
+-		logger -s "Configuring dbpermissions"
+-		@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["dbpermissions"]}'
+-	fi
+-
+-	# Notify it is safe to run the activity manager if it hasn't started already
+-	initctl emit datastore-initialized
+-
+-	# Now we configure activities doesn't matter if it hasn't started yet
+-	# Rely on ls2 delivering the messages once it does
+-
+-	# The only time we care about the first use distiction is when we're registering 
+-	# activities - behaviour is the same - just the flag is different
+-	#
+-	# Don't do this.  The Activity Manager will call the configurator directly
+-	# to work around the upstart issue.
+-
+-	#POST_FIRST_USE=0
+-	#if [ -f "/var/luna/preferences/ran-first-use" ] && [ -f "/var/luna/preferences/first-use-profile-created" ]; then
+-	#	POST_FIRST_USE=1
+-	#fi
+-
+-	#if [ $POST_FIRST_USE -eq 1 ]; then
+-	#	logger -s "Configuring activities"
+-	#	luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
+-	#else
+-	#	logger -s "Configuring activities prior to first-use"
+-	#	luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities-first-use"]}'
+-	#fi
+-	logger -s "Configuring activities"
+-	@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
+-end script
+-- 
+1.7.9.5
+

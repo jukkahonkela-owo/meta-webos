@@ -9,7 +9,7 @@ DEPENDS = "libpbnjson flex-native qt4-webos webkit-webos jemalloc glib-2.0 pmcer
 # libptmalloc3.so is preloaded by /etc/event.d/browerserver
 RDEPENDS_${PN} = "ptmalloc3"
 
-PR = "r4"
+PR = "r5"
 
 inherit autotools
 inherit pkgconfig
@@ -69,8 +69,8 @@ do_install_prepend() {
 }
 
 do_install_append() {
-        install -d ${D}${sysconfdir}/event.d
-        install -m 555 -p ${S}/browserserver ${D}${sysconfdir}/event.d/browserserver
+        install -d ${D}${sysconfdir}/init
+        install -m 555 -p ${S}/browserserver ${D}${sysconfdir}/init/browserserver.conf
 
         install -d ${D}${sysconfdir}/palm
 
