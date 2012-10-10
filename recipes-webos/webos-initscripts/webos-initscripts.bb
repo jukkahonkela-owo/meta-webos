@@ -14,6 +14,6 @@ inherit webos_enhanced_submissions
 inherit webos_cmake
 inherit webos_arch_indep
 
-# WEBOS_GIT_TAG = "submissions/${WEBOS_SUBMISSION}"
+WEBOS_GIT_TAG = "submissions/${WEBOS_SUBMISSION}"
 SRC_URI = "${OPENWEBOS_GIT_REPO}/${PN};tag=${WEBOS_GIT_TAG};protocol=git file://upstart15.patch"
 S = "${WORKDIR}/git"
