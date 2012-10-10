@@ -1,0 +1,2090 @@
+From 11ec334fe9e5d4720de63a99094dcf77da006a5b Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Mon, 1 Oct 2012 15:16:12 +0300
+Subject: [PATCH] Renamed the files to fit the new upstart convention of using
+ /etc/init with *.conf files instead of /etc/event.d
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ CMakeLists.txt                          |   46 ++++++++++-----------
+ files/launch/alignment                  |   27 ------------
+ files/launch/alignment.conf             |   27 ++++++++++++
+ files/launch/banner.conf.in             |   37 +++++++++++++++++
+ files/launch/banner.in                  |   37 -----------------
+ files/launch/bootmisc.conf.in           |   24 +++++++++++
+ files/launch/bootmisc.in                |   24 -----------
+ files/launch/cgroups.conf.in            |   30 ++++++++++++++
+ files/launch/cgroups.in                 |   30 --------------
+ files/launch/console.conf.in            |   25 +++++++++++
+ files/launch/console.in                 |   25 -----------
+ files/launch/control-alt-delete.conf.in |   27 ++++++++++++
+ files/launch/control-alt-delete.in      |   27 ------------
+ files/launch/crond.conf.in              |   34 +++++++++++++++
+ files/launch/crond.in                   |   34 ---------------
+ files/launch/devpts.conf.in             |   25 +++++++++++
+ files/launch/devpts.in                  |   25 -----------
+ files/launch/finish.conf.in             |   49 ++++++++++++++++++++++
+ files/launch/finish.in                  |   49 ----------------------
+ files/launch/hostname.conf.in           |   23 +++++++++++
+ files/launch/hostname.in                |   23 -----------
+ files/launch/modutils.conf.in           |   23 +++++++++++
+ files/launch/modutils.in                |   23 -----------
+ files/launch/mountall.conf.in           |   39 +++++++++++++++++
+ files/launch/mountall.in                |   39 -----------------
+ files/launch/networking.conf.in         |   23 +++++++++++
+ files/launch/networking.in              |   23 -----------
+ files/launch/populate-volatile.conf.in  |   25 +++++++++++
+ files/launch/populate-volatile.in       |   25 -----------
+ files/launch/rc0.conf.in                |   38 +++++++++++++++++
+ files/launch/rc0.in                     |   38 -----------------
+ files/launch/rcS                        |   37 -----------------
+ files/launch/rcS.conf                   |   37 +++++++++++++++++
+ files/launch/reboot.conf.in             |   45 ++++++++++++++++++++
+ files/launch/reboot.in                  |   45 --------------------
+ files/launch/start_update.conf.in       |   40 ++++++++++++++++++
+ files/launch/start_update.in            |   40 ------------------
+ files/launch/swaphack.conf.in           |   25 +++++++++++
+ files/launch/swaphack.in                |   25 -----------
+ files/launch/sysfs.conf.in              |   23 +++++++++++
+ files/launch/sysfs.in                   |   23 -----------
+ files/launch/timezone.conf.in           |   32 ++++++++++++++
+ files/launch/timezone.in                |   32 --------------
+ files/launch/tokens.conf.in             |   25 +++++++++++
+ files/launch/tokens.in                  |   25 -----------
+ files/launch/udev.conf.in               |   25 +++++++++++
+ files/launch/udev.in                    |   25 -----------
+ files/launch/urandom.conf.in            |   33 +++++++++++++++
+ files/launch/urandom.in                 |   33 ---------------
+ files/launch/usbctrl.conf.in            |   69 +++++++++++++++++++++++++++++++
+ files/launch/usbctrl.in                 |   69 -------------------------------
+ 51 files changed, 826 insertions(+), 826 deletions(-)
+ delete mode 100755 files/launch/alignment
+ create mode 100755 files/launch/alignment.conf
+ create mode 100755 files/launch/banner.conf.in
+ delete mode 100755 files/launch/banner.in
+ create mode 100755 files/launch/bootmisc.conf.in
+ delete mode 100755 files/launch/bootmisc.in
+ create mode 100755 files/launch/cgroups.conf.in
+ delete mode 100755 files/launch/cgroups.in
+ create mode 100755 files/launch/console.conf.in
+ delete mode 100755 files/launch/console.in
+ create mode 100755 files/launch/control-alt-delete.conf.in
+ delete mode 100755 files/launch/control-alt-delete.in
+ create mode 100644 files/launch/crond.conf.in
+ delete mode 100644 files/launch/crond.in
+ create mode 100755 files/launch/devpts.conf.in
+ delete mode 100755 files/launch/devpts.in
+ create mode 100755 files/launch/finish.conf.in
+ delete mode 100755 files/launch/finish.in
+ create mode 100644 files/launch/hostname.conf.in
+ delete mode 100644 files/launch/hostname.in
+ create mode 100755 files/launch/modutils.conf.in
+ delete mode 100755 files/launch/modutils.in
+ create mode 100755 files/launch/mountall.conf.in
+ delete mode 100755 files/launch/mountall.in
+ create mode 100755 files/launch/networking.conf.in
+ delete mode 100755 files/launch/networking.in
+ create mode 100755 files/launch/populate-volatile.conf.in
+ delete mode 100755 files/launch/populate-volatile.in
+ create mode 100644 files/launch/rc0.conf.in
+ delete mode 100644 files/launch/rc0.in
+ delete mode 100644 files/launch/rcS
+ create mode 100644 files/launch/rcS.conf
+ create mode 100644 files/launch/reboot.conf.in
+ delete mode 100644 files/launch/reboot.in
+ create mode 100644 files/launch/start_update.conf.in
+ delete mode 100644 files/launch/start_update.in
+ create mode 100644 files/launch/swaphack.conf.in
+ delete mode 100644 files/launch/swaphack.in
+ create mode 100755 files/launch/sysfs.conf.in
+ delete mode 100755 files/launch/sysfs.in
+ create mode 100644 files/launch/timezone.conf.in
+ delete mode 100644 files/launch/timezone.in
+ create mode 100644 files/launch/tokens.conf.in
+ delete mode 100644 files/launch/tokens.in
+ create mode 100755 files/launch/udev.conf.in
+ delete mode 100755 files/launch/udev.in
+ create mode 100755 files/launch/urandom.conf.in
+ delete mode 100755 files/launch/urandom.in
+ create mode 100755 files/launch/usbctrl.conf.in
+ delete mode 100755 files/launch/usbctrl.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 49dd903..97efd17 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,35 +30,35 @@ webos_machine_impl_dep()
+ # already installed on the emulators.
+ 
+ set(configurelist 
+-     files/launch/banner
+-     files/launch/bootmisc
+-     files/launch/cgroups
+-     files/launch/console
+-     files/launch/crond
+-     files/launch/devpts
+-     files/launch/finish
+-     files/launch/hostname
+-     files/launch/modutils
+-     files/launch/mountall
+-     files/launch/networking
+-     files/launch/populate-volatile
+-     files/launch/reboot
+-     files/launch/start_update
+-     files/launch/sysfs
+-     files/launch/timezone
+-     files/launch/tokens
+-     files/launch/udev
+-     files/launch/urandom
+-     files/launch/usbctrl)
++     files/launch/banner.conf
++     files/launch/bootmisc.conf
++     files/launch/cgroups.conf
++     files/launch/console.conf
++     files/launch/crond.conf
++     files/launch/devpts.conf
++     files/launch/finish.conf
++     files/launch/hostname.conf
++     files/launch/modutils.conf
++     files/launch/mountall.conf
++     files/launch/networking.conf
++     files/launch/populate-volatile.conf
++     files/launch/reboot.conf
++     files/launch/start_update.conf
++     files/launch/sysfs.conf
++     files/launch/timezone.conf
++     files/launch/tokens.conf
++     files/launch/udev.conf
++     files/launch/urandom.conf
++     files/launch/usbctrl.conf)
+ 
+ foreach (confitem ${configurelist})
+ 	webos_build_configured_file(${confitem} UPSTARTCONFDIR "")
+ endforeach()
+ 
+ if(${WEBOS_TARGET_MACHINE_IMPL} STREQUAL simulator)
+-	webos_build_configured_file(files/launch/swaphack SYSCONFDIR event.dis)
++	webos_build_configured_file(files/launch/swaphack.conf SYSCONFDIR event.dis)
+ else()
+-	webos_build_configured_file(files/launch/swaphack SYSCONFDIR event.d)
++	webos_build_configured_file(files/launch/swaphack.conf SYSCONFDIR init)
+ endif(${WEBOS_TARGET_MACHINE_IMPL} STREQUAL simulator)
+ 
+ webos_build_configured_file(scripts/public/reboot_ls-hubd_if.sh SBINDIR "")
+@@ -67,6 +67,6 @@ install(DIRECTORY DESTINATION ${WEBOS_INSTALL_UPSTARTCONFDIR}/finish-poststart.d
+ 
+ # Not installing files/launch/rcS as it is already installed on the emulator
+ install(FILES
+-        files/launch/alignment
++        files/launch/alignment.conf
+         DESTINATION ${WEBOS_INSTALL_UPSTARTCONFDIR} )
+ 
+diff --git a/files/launch/alignment b/files/launch/alignment
+deleted file mode 100755
+index 23f2e52..0000000
+--- a/files/launch/alignment
++++ /dev/null
+@@ -1,27 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped udev
+-
+-script
+-    if [ -e /proc/cpu/alignment ]; then
+-        echo "3" > /proc/cpu/alignment
+-    fi
+-end script
+diff --git a/files/launch/alignment.conf b/files/launch/alignment.conf
+new file mode 100755
+index 0000000..23f2e52
+--- /dev/null
++++ b/files/launch/alignment.conf
+@@ -0,0 +1,27 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped udev
++
++script
++    if [ -e /proc/cpu/alignment ]; then
++        echo "3" > /proc/cpu/alignment
++    fi
++end script
+diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
+new file mode 100755
+index 0000000..a240591
+--- /dev/null
++++ b/files/launch/banner.conf.in
+@@ -0,0 +1,37 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on runlevel 2
++
++console output
++
++script
++    set $(runlevel || true)
++    if [ "$2" != "2" ]; then
++        set $(runlevel --set 2 || true)
++    fi
++
++    if [ "$1" != "unknown" ]; then
++        PREVLEVEL=$1
++        RUNLEVEL=$2
++        export PREVLEVEL RUNLEVEL
++    fi
++    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner.sh start
++end script
+diff --git a/files/launch/banner.in b/files/launch/banner.in
+deleted file mode 100755
+index a240591..0000000
+--- a/files/launch/banner.in
++++ /dev/null
+@@ -1,37 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on runlevel 2
+-
+-console output
+-
+-script
+-    set $(runlevel || true)
+-    if [ "$2" != "2" ]; then
+-        set $(runlevel --set 2 || true)
+-    fi
+-
+-    if [ "$1" != "unknown" ]; then
+-        PREVLEVEL=$1
+-        RUNLEVEL=$2
+-        export PREVLEVEL RUNLEVEL
+-    fi
+-    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner.sh start
+-end script
+diff --git a/files/launch/bootmisc.conf.in b/files/launch/bootmisc.conf.in
+new file mode 100755
+index 0000000..a60f764
+--- /dev/null
++++ b/files/launch/bootmisc.conf.in
+@@ -0,0 +1,24 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped networking
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/bootmisc.sh start
++
+diff --git a/files/launch/bootmisc.in b/files/launch/bootmisc.in
+deleted file mode 100755
+index a60f764..0000000
+--- a/files/launch/bootmisc.in
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped networking
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/bootmisc.sh start
+-
+diff --git a/files/launch/cgroups.conf.in b/files/launch/cgroups.conf.in
+new file mode 100755
+index 0000000..b57b1ce
+--- /dev/null
++++ b/files/launch/cgroups.conf.in
+@@ -0,0 +1,30 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped modutils
++
++console output
++
++script
++    if [ -f @WEBOS_INSTALL_DEFAULTCONFDIR@/cpushareholder ] ; then
++        . @WEBOS_INSTALL_DEFAULTCONFDIR@/cpushareholder
++        cpushareholder_init
++    fi
++end script
+diff --git a/files/launch/cgroups.in b/files/launch/cgroups.in
+deleted file mode 100755
+index b57b1ce..0000000
+--- a/files/launch/cgroups.in
++++ /dev/null
+@@ -1,30 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped modutils
+-
+-console output
+-
+-script
+-    if [ -f @WEBOS_INSTALL_DEFAULTCONFDIR@/cpushareholder ] ; then
+-        . @WEBOS_INSTALL_DEFAULTCONFDIR@/cpushareholder
+-        cpushareholder_init
+-    fi
+-end script
+diff --git a/files/launch/console.conf.in b/files/launch/console.conf.in
+new file mode 100755
+index 0000000..daae422
+--- /dev/null
++++ b/files/launch/console.conf.in
+@@ -0,0 +1,25 @@
++# @@@LICENSE
++#
++# Source originally from http://upstart.ubuntu.com/download/example-jobs
++#
++# Copyright (c) 2008 Canonical Ltd.
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Use of this file is subject to license terms as set forth in the COPYING
++# file available at http://upstart.ubuntu.com/download/example-jobs
++#
++# LICENSE@@@
++
++# console
++
++description	"console"
++
++start on stopped bootmisc
++
++pre-start script
++    grep -q 'console=' /proc/cmdline || stop
++end script
++
++exec @WEBOS_INSTALL_BASE_SBINDIR@/getty console 115200 vt100
++
++respawn
+diff --git a/files/launch/console.in b/files/launch/console.in
+deleted file mode 100755
+index daae422..0000000
+--- a/files/launch/console.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Source originally from http://upstart.ubuntu.com/download/example-jobs
+-#
+-# Copyright (c) 2008 Canonical Ltd.
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Use of this file is subject to license terms as set forth in the COPYING
+-# file available at http://upstart.ubuntu.com/download/example-jobs
+-#
+-# LICENSE@@@
+-
+-# console
+-
+-description	"console"
+-
+-start on stopped bootmisc
+-
+-pre-start script
+-    grep -q 'console=' /proc/cmdline || stop
+-end script
+-
+-exec @WEBOS_INSTALL_BASE_SBINDIR@/getty console 115200 vt100
+-
+-respawn
+diff --git a/files/launch/control-alt-delete.conf.in b/files/launch/control-alt-delete.conf.in
+new file mode 100755
+index 0000000..1b97966
+--- /dev/null
++++ b/files/launch/control-alt-delete.conf.in
+@@ -0,0 +1,27 @@
++# @@@LICENSE
++#
++# Source originally from http://upstart.ubuntu.com/download/example-jobs
++#
++# Copyright (c) 2008 Canonical Ltd.
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Use of this file is subject to license terms as set forth in the COPYING
++# file available at http://upstart.ubuntu.com/download/example-jobs
++#
++# LICENSE@@@
++
++# control-alt-delete - emergency keypress handling
++#
++# This task is run whenever the Control-Alt-Delete key combination is
++# pressed.  Usually used to shut down the machine.
++
++start on control-alt-delete
++
++script 
++   if [ -e /sys/class/display/lcd.0/brightness ]; then
++      echo 10 > /sys/class/display/lcd.0/brightness || true
++   elif [ -e /sys/class/leds/lcd/brightness ]; then
++       echo 10 > /sys/class/leds/lcd/brightness || true
++   fi
++   @WEBOS_INSTALL_BASE_SBINDIR@/shutdown -r now "Control-Alt-Delete pressed"
++end script
+diff --git a/files/launch/control-alt-delete.in b/files/launch/control-alt-delete.in
+deleted file mode 100755
+index 1b97966..0000000
+--- a/files/launch/control-alt-delete.in
++++ /dev/null
+@@ -1,27 +0,0 @@
+-# @@@LICENSE
+-#
+-# Source originally from http://upstart.ubuntu.com/download/example-jobs
+-#
+-# Copyright (c) 2008 Canonical Ltd.
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Use of this file is subject to license terms as set forth in the COPYING
+-# file available at http://upstart.ubuntu.com/download/example-jobs
+-#
+-# LICENSE@@@
+-
+-# control-alt-delete - emergency keypress handling
+-#
+-# This task is run whenever the Control-Alt-Delete key combination is
+-# pressed.  Usually used to shut down the machine.
+-
+-start on control-alt-delete
+-
+-script 
+-   if [ -e /sys/class/display/lcd.0/brightness ]; then
+-      echo 10 > /sys/class/display/lcd.0/brightness || true
+-   elif [ -e /sys/class/leds/lcd/brightness ]; then
+-       echo 10 > /sys/class/leds/lcd/brightness || true
+-   fi
+-   @WEBOS_INSTALL_BASE_SBINDIR@/shutdown -r now "Control-Alt-Delete pressed"
+-end script
+diff --git a/files/launch/crond.conf.in b/files/launch/crond.conf.in
+new file mode 100644
+index 0000000..48368dd
+--- /dev/null
++++ b/files/launch/crond.conf.in
+@@ -0,0 +1,34 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: conf; -*-
++
++# jobfile for busybox crond, with pre-start commands to create the
++# directory and files it wants by default.  That there's not 'start
++# on' stanza is intentional: it's for development use only.  We can
++# turn it on later if we need it, e.g. to keep the clock synced.  It
++# does work.
++
++respawn
++
++exec @WEBOS_INSTALL_SBINDIR@/crond -f
++
++pre-start script
++    mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/spool/cron/crontabs
++    ln -sf @WEBOS_INSTALL_SYSCONFDIR@/cron/crontabs/root @WEBOS_INSTALL_LOCALSTATEDIR@/spool/cron/crontabs/root
++end script
+diff --git a/files/launch/crond.in b/files/launch/crond.in
+deleted file mode 100644
+index 48368dd..0000000
+--- a/files/launch/crond.in
++++ /dev/null
+@@ -1,34 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: conf; -*-
+-
+-# jobfile for busybox crond, with pre-start commands to create the
+-# directory and files it wants by default.  That there's not 'start
+-# on' stanza is intentional: it's for development use only.  We can
+-# turn it on later if we need it, e.g. to keep the clock synced.  It
+-# does work.
+-
+-respawn
+-
+-exec @WEBOS_INSTALL_SBINDIR@/crond -f
+-
+-pre-start script
+-    mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/spool/cron/crontabs
+-    ln -sf @WEBOS_INSTALL_SYSCONFDIR@/cron/crontabs/root @WEBOS_INSTALL_LOCALSTATEDIR@/spool/cron/crontabs/root
+-end script
+diff --git a/files/launch/devpts.conf.in b/files/launch/devpts.conf.in
+new file mode 100755
+index 0000000..31057db
+--- /dev/null
++++ b/files/launch/devpts.conf.in
+@@ -0,0 +1,25 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped populate-volatile
++
++console output
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/devpts.sh start
+diff --git a/files/launch/devpts.in b/files/launch/devpts.in
+deleted file mode 100755
+index 31057db..0000000
+--- a/files/launch/devpts.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped populate-volatile
+-
+-console output
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/devpts.sh start
+diff --git a/files/launch/finish.conf.in b/files/launch/finish.conf.in
+new file mode 100755
+index 0000000..09bf49f
+--- /dev/null
++++ b/files/launch/finish.conf.in
+@@ -0,0 +1,49 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on ls-hubd_public-ready
++
++# Make sure variables from early boot are passed through to this job
++env EARLY_BOOT_START
++env EARLY_BOOT_PID
++env EARLY_BOOT_STOP
++
++script
++	# Record upstart timings, for boot performance tracking
++	mkdir -p /tmp/misc-props
++	echo -n $EARLY_BOOT_PID > /tmp/misc-props/pids.early_start
++	echo -n $EARLY_BOOT_START > /tmp/misc-props/timing.early_start
++	echo -n $EARLY_BOOT_STOP > /tmp/misc-props/timing.early_stop
++	echo -n $UPSTART_STARTTIME > /tmp/misc-props/timing.upstart_begin
++	echo -n $$ > /tmp/misc-props/pids.upstart_finish
++	echo -n `date -U` > /tmp/misc-props/timing.upstart_finish
++
++    # generate mark identifying this boot
++    [ -x @WEBOS_INSTALL_SYSCONFDIR@/init.d/bootmark.sh ] && @WEBOS_INSTALL_SYSCONFDIR@/init.d/bootmark.sh start
++
++   # If anybody needs to sneak in before we start the race among
++   # components that 'start on stopped finish', this is the place.
++   # run-parts won't return until all of the scripts in
++   # finish-poststart.d return and so the stopped event will be
++   # delayed by that long.
++    if [ -d @WEBOS_INSTALL_UPSTARTCONFDIR@/finish-poststart.d ]; then
++        run-parts @WEBOS_INSTALL_UPSTARTCONFDIR@/finish-poststart.d
++    fi
++end script
+diff --git a/files/launch/finish.in b/files/launch/finish.in
+deleted file mode 100755
+index 09bf49f..0000000
+--- a/files/launch/finish.in
++++ /dev/null
+@@ -1,49 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on ls-hubd_public-ready
+-
+-# Make sure variables from early boot are passed through to this job
+-env EARLY_BOOT_START
+-env EARLY_BOOT_PID
+-env EARLY_BOOT_STOP
+-
+-script
+-	# Record upstart timings, for boot performance tracking
+-	mkdir -p /tmp/misc-props
+-	echo -n $EARLY_BOOT_PID > /tmp/misc-props/pids.early_start
+-	echo -n $EARLY_BOOT_START > /tmp/misc-props/timing.early_start
+-	echo -n $EARLY_BOOT_STOP > /tmp/misc-props/timing.early_stop
+-	echo -n $UPSTART_STARTTIME > /tmp/misc-props/timing.upstart_begin
+-	echo -n $$ > /tmp/misc-props/pids.upstart_finish
+-	echo -n `date -U` > /tmp/misc-props/timing.upstart_finish
+-
+-    # generate mark identifying this boot
+-    [ -x @WEBOS_INSTALL_SYSCONFDIR@/init.d/bootmark.sh ] && @WEBOS_INSTALL_SYSCONFDIR@/init.d/bootmark.sh start
+-
+-   # If anybody needs to sneak in before we start the race among
+-   # components that 'start on stopped finish', this is the place.
+-   # run-parts won't return until all of the scripts in
+-   # finish-poststart.d return and so the stopped event will be
+-   # delayed by that long.
+-    if [ -d @WEBOS_INSTALL_UPSTARTCONFDIR@/finish-poststart.d ]; then
+-        run-parts @WEBOS_INSTALL_UPSTARTCONFDIR@/finish-poststart.d
+-    fi
+-end script
+diff --git a/files/launch/hostname.conf.in b/files/launch/hostname.conf.in
+new file mode 100644
+index 0000000..f1ff0d6
+--- /dev/null
++++ b/files/launch/hostname.conf.in
+@@ -0,0 +1,23 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: conf; -*-
++
++start on stopped devpts
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/hostname.sh start
+diff --git a/files/launch/hostname.in b/files/launch/hostname.in
+deleted file mode 100644
+index f1ff0d6..0000000
+--- a/files/launch/hostname.in
++++ /dev/null
+@@ -1,23 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: conf; -*-
+-
+-start on stopped devpts
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/hostname.sh start
+diff --git a/files/launch/modutils.conf.in b/files/launch/modutils.conf.in
+new file mode 100755
+index 0000000..6db6ece
+--- /dev/null
++++ b/files/launch/modutils.conf.in
+@@ -0,0 +1,23 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped alignment
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/modutils.sh start
+diff --git a/files/launch/modutils.in b/files/launch/modutils.in
+deleted file mode 100755
+index 6db6ece..0000000
+--- a/files/launch/modutils.in
++++ /dev/null
+@@ -1,23 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped alignment
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/modutils.sh start
+diff --git a/files/launch/mountall.conf.in b/files/launch/mountall.conf.in
+new file mode 100755
+index 0000000..9a636ca
+--- /dev/null
++++ b/files/launch/mountall.conf.in
+@@ -0,0 +1,39 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped cgroups
++
++console output
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/mountall.sh start
++
++# Stuff to do after we're sure our separate @WEBOS_INSTALL_LOCALSTATEDIR@ exists -- after
++# mountall.sh exits
++post-stop script
++    # Create @WEBOS_INSTALL_LOCALSTATEDIR@/preferences directory
++    if [ -f @WEBOS_INSTALL_LOCALSTATEDIR@/preferences ]; then rm @WEBOS_INSTALL_LOCALSTATEDIR@/preferences; fi # nuke if file, not dir
++    if [ ! -d @WEBOS_INSTALL_LOCALSTATEDIR@/preferences ]; then
++        mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
++        chown root @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
++        chmod 777 @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
++    fi
++    mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/home/root
++    mkdir -p @WEBOS_INSTALL_PRESERVEDTMPDIR@
++end script
+diff --git a/files/launch/mountall.in b/files/launch/mountall.in
+deleted file mode 100755
+index 9a636ca..0000000
+--- a/files/launch/mountall.in
++++ /dev/null
+@@ -1,39 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped cgroups
+-
+-console output
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/mountall.sh start
+-
+-# Stuff to do after we're sure our separate @WEBOS_INSTALL_LOCALSTATEDIR@ exists -- after
+-# mountall.sh exits
+-post-stop script
+-    # Create @WEBOS_INSTALL_LOCALSTATEDIR@/preferences directory
+-    if [ -f @WEBOS_INSTALL_LOCALSTATEDIR@/preferences ]; then rm @WEBOS_INSTALL_LOCALSTATEDIR@/preferences; fi # nuke if file, not dir
+-    if [ ! -d @WEBOS_INSTALL_LOCALSTATEDIR@/preferences ]; then
+-        mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
+-        chown root @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
+-        chmod 777 @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
+-    fi
+-    mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/home/root
+-    mkdir -p @WEBOS_INSTALL_PRESERVEDTMPDIR@
+-end script
+diff --git a/files/launch/networking.conf.in b/files/launch/networking.conf.in
+new file mode 100755
+index 0000000..8508d0a
+--- /dev/null
++++ b/files/launch/networking.conf.in
+@@ -0,0 +1,23 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on stopped usbctrl
++
++console output
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/networking start
+diff --git a/files/launch/networking.in b/files/launch/networking.in
+deleted file mode 100755
+index 8508d0a..0000000
+--- a/files/launch/networking.in
++++ /dev/null
+@@ -1,23 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on stopped usbctrl
+-
+-console output
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/networking start
+diff --git a/files/launch/populate-volatile.conf.in b/files/launch/populate-volatile.conf.in
+new file mode 100755
+index 0000000..332082f
+--- /dev/null
++++ b/files/launch/populate-volatile.conf.in
+@@ -0,0 +1,25 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped tokens
++
++script
++   @WEBOS_INSTALL_SYSCONFDIR@/init.d/populate-volatile.sh start
++end script
+diff --git a/files/launch/populate-volatile.in b/files/launch/populate-volatile.in
+deleted file mode 100755
+index 332082f..0000000
+--- a/files/launch/populate-volatile.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped tokens
+-
+-script
+-   @WEBOS_INSTALL_SYSCONFDIR@/init.d/populate-volatile.sh start
+-end script
+diff --git a/files/launch/rc0.conf.in b/files/launch/rc0.conf.in
+new file mode 100644
+index 0000000..a63dc69
+--- /dev/null
++++ b/files/launch/rc0.conf.in
+@@ -0,0 +1,38 @@
++# @@@LICENSE
++#
++# Source originally from http://upstart.ubuntu.com/download/example-jobs
++#
++# Copyright (c) 2008 Canonical Ltd.
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Use of this file is subject to license terms as set forth in the COPYING
++# file available at http://upstart.ubuntu.com/download/example-jobs
++#
++# LICENSE@@@
++
++# rc0 - runlevel 0 compatibility
++#
++# This task runs the old sysv-rc runlevel 0 ("halt/poweroff") scripts with
++# the decision as to whether to halt or power off the system left up to the
++# script (and thus @WEBOS_INSTALL_DEFAULTCONFDIR@/poweroff).
++
++# runlevel 0 means shutting down.
++start on runlevel 0
++
++stop on runlevel [!0]
++
++console output
++script
++    set $(runlevel || true)
++    if [ "$2" != "0" ] && [ "$2" != "6" ]; then
++        set $(runlevel --set 0 || true)
++    fi
++
++    if [ "$1" != "unknown" ]; then
++        PREVLEVEL=$1
++        RUNLEVEL=$2
++        export PREVLEVEL RUNLEVEL
++    fi
++
++    exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/rc 0
++end script
+diff --git a/files/launch/rc0.in b/files/launch/rc0.in
+deleted file mode 100644
+index a63dc69..0000000
+--- a/files/launch/rc0.in
++++ /dev/null
+@@ -1,38 +0,0 @@
+-# @@@LICENSE
+-#
+-# Source originally from http://upstart.ubuntu.com/download/example-jobs
+-#
+-# Copyright (c) 2008 Canonical Ltd.
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Use of this file is subject to license terms as set forth in the COPYING
+-# file available at http://upstart.ubuntu.com/download/example-jobs
+-#
+-# LICENSE@@@
+-
+-# rc0 - runlevel 0 compatibility
+-#
+-# This task runs the old sysv-rc runlevel 0 ("halt/poweroff") scripts with
+-# the decision as to whether to halt or power off the system left up to the
+-# script (and thus @WEBOS_INSTALL_DEFAULTCONFDIR@/poweroff).
+-
+-# runlevel 0 means shutting down.
+-start on runlevel 0
+-
+-stop on runlevel [!0]
+-
+-console output
+-script
+-    set $(runlevel || true)
+-    if [ "$2" != "0" ] && [ "$2" != "6" ]; then
+-        set $(runlevel --set 0 || true)
+-    fi
+-
+-    if [ "$1" != "unknown" ]; then
+-        PREVLEVEL=$1
+-        RUNLEVEL=$2
+-        export PREVLEVEL RUNLEVEL
+-    fi
+-
+-    exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/rc 0
+-end script
+diff --git a/files/launch/rcS b/files/launch/rcS
+deleted file mode 100644
+index 7470071..0000000
+--- a/files/launch/rcS
++++ /dev/null
+@@ -1,37 +0,0 @@
+-# @@@LICENSE
+-#
+-# Source originally from http://upstart.ubuntu.com/download/example-jobs
+-#
+-# Copyright (c) 2008 Canonical Ltd.
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Use of this file is subject to license terms as set forth the in COPYING
+-# file available at http://upstart.ubuntu.com/download/example-jobs
+-#
+-# LICENSE@@@
+-
+-# rcS - runlevel compatibility
+-#
+-# This task runs the old sysv-rc startup scripts.
+-
+-start on startup
+-
+-stop on runlevel
+-
+-# Note: there can be no previous runlevel here, if we have one it's bad
+-# information (we enter rc1 not rcS for maintenance).
+-console output
+-script
+-    set $(runlevel || true)
+-    if [ "$2" != "S" ]; then
+-        set $(runlevel --set S || true)
+-    fi
+-
+-    if [ "$1" != "unknown" ]; then
+-        PREVLEVEL=$1
+-        RUNLEVEL=$2
+-        export PREVLEVEL RUNLEVEL
+-    fi
+-
+-    telinit 2
+-end script
+diff --git a/files/launch/rcS.conf b/files/launch/rcS.conf
+new file mode 100644
+index 0000000..7470071
+--- /dev/null
++++ b/files/launch/rcS.conf
+@@ -0,0 +1,37 @@
++# @@@LICENSE
++#
++# Source originally from http://upstart.ubuntu.com/download/example-jobs
++#
++# Copyright (c) 2008 Canonical Ltd.
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Use of this file is subject to license terms as set forth the in COPYING
++# file available at http://upstart.ubuntu.com/download/example-jobs
++#
++# LICENSE@@@
++
++# rcS - runlevel compatibility
++#
++# This task runs the old sysv-rc startup scripts.
++
++start on startup
++
++stop on runlevel
++
++# Note: there can be no previous runlevel here, if we have one it's bad
++# information (we enter rc1 not rcS for maintenance).
++console output
++script
++    set $(runlevel || true)
++    if [ "$2" != "S" ]; then
++        set $(runlevel --set S || true)
++    fi
++
++    if [ "$1" != "unknown" ]; then
++        PREVLEVEL=$1
++        RUNLEVEL=$2
++        export PREVLEVEL RUNLEVEL
++    fi
++
++    telinit 2
++end script
+diff --git a/files/launch/reboot.conf.in b/files/launch/reboot.conf.in
+new file mode 100644
+index 0000000..388280a
+--- /dev/null
++++ b/files/launch/reboot.conf.in
+@@ -0,0 +1,45 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++# reboot - runlevel 6 compatibility
++#
++# This task runs the old sysv-rc runlevel 0 ("halt/poweroff") scripts with
++# the decision as to whether to halt or power off the system left up to the
++# script (and thus @WEBOS_INSTALL_DEFAULTCONFDIR@/poweroff).
++
++# runlevel 6 means reboot
++start on runlevel 6
++
++#stop on runlevel [!6]
++
++console output
++script
++    set $(runlevel || true)
++    if [ "$2" != "6" ]; then
++        set $(runlevel --set 6 || true)
++    fi
++
++    if [ "$1" != "unknown" ]; then
++        PREVLEVEL=$1
++        RUNLEVEL=$2
++        export PREVLEVEL RUNLEVEL
++    fi
++
++    @WEBOS_INSTALL_SYSCONFDIR@/init.d/rc 6
++end script
+diff --git a/files/launch/reboot.in b/files/launch/reboot.in
+deleted file mode 100644
+index 388280a..0000000
+--- a/files/launch/reboot.in
++++ /dev/null
+@@ -1,45 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-# reboot - runlevel 6 compatibility
+-#
+-# This task runs the old sysv-rc runlevel 0 ("halt/poweroff") scripts with
+-# the decision as to whether to halt or power off the system left up to the
+-# script (and thus @WEBOS_INSTALL_DEFAULTCONFDIR@/poweroff).
+-
+-# runlevel 6 means reboot
+-start on runlevel 6
+-
+-#stop on runlevel [!6]
+-
+-console output
+-script
+-    set $(runlevel || true)
+-    if [ "$2" != "6" ]; then
+-        set $(runlevel --set 6 || true)
+-    fi
+-
+-    if [ "$1" != "unknown" ]; then
+-        PREVLEVEL=$1
+-        RUNLEVEL=$2
+-        export PREVLEVEL RUNLEVEL
+-    fi
+-
+-    @WEBOS_INSTALL_SYSCONFDIR@/init.d/rc 6
+-end script
+diff --git a/files/launch/start_update.conf.in b/files/launch/start_update.conf.in
+new file mode 100644
+index 0000000..563334a
+--- /dev/null
++++ b/files/launch/start_update.conf.in
+@@ -0,0 +1,40 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++# this is a fake job that exists only so somebody can say 'start -n
++# start_update'.  In order to be a legal upstart job, however, it must
++# have an exec or script line
++
++# Jobfiles for daemons that ought to be stopped during an update can
++# simply "stop on started start_update".  But tasks cannot: they are
++# in the stopped state, not running, so they would have to "start on
++# started start_update".  Their scripts can tell why they were
++# started, and can pass "stop" to their @WEBOS_INSTALL_SYSCONFDIR@/init.d script, but
++# upstart will still emit a "started" event to every jobfile down the
++# line.  We don't want that.  For now, just list them here.
++
++# The call to stop networking is done in the stop_comms script, in the
++# shutdownscripts component.
++
++script
++    for script in mountnfs.sh bootmisc.sh finish; do
++        @WEBOS_INSTALL_SYSCONFDIR@/init.d/${script} stop
++    done
++end script
+diff --git a/files/launch/start_update.in b/files/launch/start_update.in
+deleted file mode 100644
+index 563334a..0000000
+--- a/files/launch/start_update.in
++++ /dev/null
+@@ -1,40 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-# this is a fake job that exists only so somebody can say 'start -n
+-# start_update'.  In order to be a legal upstart job, however, it must
+-# have an exec or script line
+-
+-# Jobfiles for daemons that ought to be stopped during an update can
+-# simply "stop on started start_update".  But tasks cannot: they are
+-# in the stopped state, not running, so they would have to "start on
+-# started start_update".  Their scripts can tell why they were
+-# started, and can pass "stop" to their @WEBOS_INSTALL_SYSCONFDIR@/init.d script, but
+-# upstart will still emit a "started" event to every jobfile down the
+-# line.  We don't want that.  For now, just list them here.
+-
+-# The call to stop networking is done in the stop_comms script, in the
+-# shutdownscripts component.
+-
+-script
+-    for script in mountnfs.sh bootmisc.sh finish; do
+-        @WEBOS_INSTALL_SYSCONFDIR@/init.d/${script} stop
+-    done
+-end script
+diff --git a/files/launch/swaphack.conf.in b/files/launch/swaphack.conf.in
+new file mode 100644
+index 0000000..768dee5
+--- /dev/null
++++ b/files/launch/swaphack.conf.in
+@@ -0,0 +1,25 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped mountall
++
++console output
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/swaphack.sh
+diff --git a/files/launch/swaphack.in b/files/launch/swaphack.in
+deleted file mode 100644
+index 768dee5..0000000
+--- a/files/launch/swaphack.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped mountall
+-
+-console output
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/swaphack.sh
+diff --git a/files/launch/sysfs.conf.in b/files/launch/sysfs.conf.in
+new file mode 100755
+index 0000000..1d268c6
+--- /dev/null
++++ b/files/launch/sysfs.conf.in
+@@ -0,0 +1,23 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped banner
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/sysfs.sh start
+diff --git a/files/launch/sysfs.in b/files/launch/sysfs.in
+deleted file mode 100755
+index 1d268c6..0000000
+--- a/files/launch/sysfs.in
++++ /dev/null
+@@ -1,23 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped banner
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/sysfs.sh start
+diff --git a/files/launch/timezone.conf.in b/files/launch/timezone.conf.in
+new file mode 100644
+index 0000000..2d51dd1
+--- /dev/null
++++ b/files/launch/timezone.conf.in
+@@ -0,0 +1,32 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: conf; -*-
++
++start on stopped mountall
++
++console output
++
++pre-start script
++    test -x @WEBOS_INSTALL_BINDIR@/tzset || stop
++end script
++
++script
++    @WEBOS_INSTALL_BINDIR@/tzset -u
++    @WEBOS_INSTALL_BINDIR@/tzset
++end script
+diff --git a/files/launch/timezone.in b/files/launch/timezone.in
+deleted file mode 100644
+index 2d51dd1..0000000
+--- a/files/launch/timezone.in
++++ /dev/null
+@@ -1,32 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: conf; -*-
+-
+-start on stopped mountall
+-
+-console output
+-
+-pre-start script
+-    test -x @WEBOS_INSTALL_BINDIR@/tzset || stop
+-end script
+-
+-script
+-    @WEBOS_INSTALL_BINDIR@/tzset -u
+-    @WEBOS_INSTALL_BINDIR@/tzset
+-end script
+diff --git a/files/launch/tokens.conf.in b/files/launch/tokens.conf.in
+new file mode 100644
+index 0000000..d6141eb
+--- /dev/null
++++ b/files/launch/tokens.conf.in
+@@ -0,0 +1,25 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped mountall
++
++console output
++
++exec @WEBOS_INSTALL_BASE_SBINDIR@/tokens --mount
+diff --git a/files/launch/tokens.in b/files/launch/tokens.in
+deleted file mode 100644
+index d6141eb..0000000
+--- a/files/launch/tokens.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped mountall
+-
+-console output
+-
+-exec @WEBOS_INSTALL_BASE_SBINDIR@/tokens --mount
+diff --git a/files/launch/udev.conf.in b/files/launch/udev.conf.in
+new file mode 100755
+index 0000000..57ea23f
+--- /dev/null
++++ b/files/launch/udev.conf.in
+@@ -0,0 +1,25 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++
++start on stopped sysfs
++
++console output
++
++exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/udev start
+diff --git a/files/launch/udev.in b/files/launch/udev.in
+deleted file mode 100755
+index 57ea23f..0000000
+--- a/files/launch/udev.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped sysfs
+-
+-console output
+-
+-exec @WEBOS_INSTALL_SYSCONFDIR@/init.d/udev start
+diff --git a/files/launch/urandom.conf.in b/files/launch/urandom.conf.in
+new file mode 100755
+index 0000000..95d4f61
+--- /dev/null
++++ b/files/launch/urandom.conf.in
+@@ -0,0 +1,33 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++# -*- mode: shell-script; -*-
++start on stopped hostname
++# also start us when rebooting/shuting down, so we can run the stop script:
++start on runlevel [!2]
++
++script
++    set $(runlevel || true)
++    if [ "$2" = "2" ]; then
++	@WEBOS_INSTALL_SYSCONFDIR@/init.d/urandom start
++    else
++	@WEBOS_INSTALL_SYSCONFDIR@/init.d/urandom stop
++    fi
++end script
++
++
+diff --git a/files/launch/urandom.in b/files/launch/urandom.in
+deleted file mode 100755
+index 95d4f61..0000000
+--- a/files/launch/urandom.in
++++ /dev/null
+@@ -1,33 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-start on stopped hostname
+-# also start us when rebooting/shuting down, so we can run the stop script:
+-start on runlevel [!2]
+-
+-script
+-    set $(runlevel || true)
+-    if [ "$2" = "2" ]; then
+-	@WEBOS_INSTALL_SYSCONFDIR@/init.d/urandom start
+-    else
+-	@WEBOS_INSTALL_SYSCONFDIR@/init.d/urandom stop
+-    fi
+-end script
+-
+-
+diff --git a/files/launch/usbctrl.conf.in b/files/launch/usbctrl.conf.in
+new file mode 100755
+index 0000000..b9a627c
+--- /dev/null
++++ b/files/launch/usbctrl.conf.in
+@@ -0,0 +1,69 @@
++# @@@LICENSE
++#
++# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++# LICENSE@@@
++
++start on stopped hostname
++
++console output
++
++script
++
++# If dropbear is in the image the we should be on an eng image
++if [ -x @WEBOS_INSTALL_SBINDIR@/dropbear ]; then
++	install -d @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/
++	touch @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled
++fi
++
++if [ -e /sys/class/usb_gadget/config_num ]; then
++	if [[ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled && -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]]; then
++		echo 5 > /sys/class/usb_gadget/config_num
++	elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled ]; then
++		echo 5 > /sys/class/usb_gadget/config_num
++	elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]; then
++		echo 2 > /sys/class/usb_gadget/config_num
++	else
++		echo 1 > /sys/class/usb_gadget/config_num
++	fi
++else
++    export machineType=`uname -m`
++
++    if [[ "$machineType" == "armv7l" ]];then
++		if [[ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled && -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]]; then
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x101 || true
++		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled ]; then
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x101 || true
++		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]; then
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8002 || true
++		else
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8004 || true
++		fi
++	elif [[ "$machineType" == "armv6l" ]];then
++		if [[ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled && -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]]; then
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x103 || true
++		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled ]; then
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x103 || true
++		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]; then
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8012 || true
++		else
++			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8012 || true
++		fi
++	    else
++		@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite || true
++    fi
++fi
++
++end script
+diff --git a/files/launch/usbctrl.in b/files/launch/usbctrl.in
+deleted file mode 100755
+index b9a627c..0000000
+--- a/files/launch/usbctrl.in
++++ /dev/null
+@@ -1,69 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-start on stopped hostname
+-
+-console output
+-
+-script
+-
+-# If dropbear is in the image the we should be on an eng image
+-if [ -x @WEBOS_INSTALL_SBINDIR@/dropbear ]; then
+-	install -d @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/
+-	touch @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled
+-fi
+-
+-if [ -e /sys/class/usb_gadget/config_num ]; then
+-	if [[ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled && -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]]; then
+-		echo 5 > /sys/class/usb_gadget/config_num
+-	elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled ]; then
+-		echo 5 > /sys/class/usb_gadget/config_num
+-	elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]; then
+-		echo 2 > /sys/class/usb_gadget/config_num
+-	else
+-		echo 1 > /sys/class/usb_gadget/config_num
+-	fi
+-else
+-    export machineType=`uname -m`
+-
+-    if [[ "$machineType" == "armv7l" ]];then
+-		if [[ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled && -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]]; then
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x101 || true
+-		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled ]; then
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x101 || true
+-		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]; then
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8002 || true
+-		else
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8004 || true
+-		fi
+-	elif [[ "$machineType" == "armv6l" ]];then
+-		if [[ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled && -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]]; then
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x103 || true
+-		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/usbnet_enabled ]; then
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x103 || true
+-		elif [ -e @WEBOS_INSTALL_LOCALSTATEDIR@/gadget/novacom_enabled ]; then
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8012 || true
+-		else
+-			@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite product=0x8012 || true
+-		fi
+-	    else
+-		@WEBOS_INSTALL_BASE_SBINDIR@/modprobe -q g_composite || true
+-    fi
+-fi
+-
+-end script
+-- 
+1.7.9.5
+
