@@ -1,8 +1,7 @@
-From 11ec334fe9e5d4720de63a99094dcf77da006a5b Mon Sep 17 00:00:00 2001
+From c62fff4b602b7a9d105e5f9412acc0146c2fbf14 Mon Sep 17 00:00:00 2001
 From: Jukka Honkela <jukka.honkela@palm.com>
 Date: Mon, 1 Oct 2012 15:16:12 +0300
-Subject: [PATCH] Renamed the files to fit the new upstart convention of using
- /etc/init with *.conf files instead of /etc/event.d
+Subject: [PATCH] upstart 1.5 related changes
 
 Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
 ---
@@ -110,7 +109,7 @@ Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
  delete mode 100755 files/launch/usbctrl.in
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 49dd903..97efd17 100644
+index d6861bd..d4eac72 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -30,35 +30,35 @@ webos_machine_impl_dep()
@@ -171,13 +170,13 @@ index 49dd903..97efd17 100644
  endif(${WEBOS_TARGET_MACHINE_IMPL} STREQUAL simulator)
  
  webos_build_configured_file(scripts/public/reboot_ls-hubd_if.sh SBINDIR "")
-@@ -67,6 +67,6 @@ install(DIRECTORY DESTINATION ${WEBOS_INSTALL_UPSTARTCONFDIR}/finish-poststart.d
+@@ -67,6 +67,6 @@ install(DIRECTORY DESTINATION @WEBOS_INSTALL_UPSTARTCONFDIR@/finish-poststart.d)
  
  # Not installing files/launch/rcS as it is already installed on the emulator
  install(FILES
 -        files/launch/alignment
 +        files/launch/alignment.conf
-         DESTINATION ${WEBOS_INSTALL_UPSTARTCONFDIR} )
+         DESTINATION @WEBOS_INSTALL_UPSTARTCONFDIR@ )
  
 diff --git a/files/launch/alignment b/files/launch/alignment
 deleted file mode 100755
@@ -247,7 +246,7 @@ index 0000000..23f2e52
 +end script
 diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
 new file mode 100755
-index 0000000..a240591
+index 0000000..3546b73
 --- /dev/null
 +++ b/files/launch/banner.conf.in
 @@ -0,0 +1,37 @@
@@ -286,11 +285,11 @@ index 0000000..a240591
 +        RUNLEVEL=$2
 +        export PREVLEVEL RUNLEVEL
 +    fi
-+    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner.sh start
++    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner start
 +end script
 diff --git a/files/launch/banner.in b/files/launch/banner.in
 deleted file mode 100755
-index a240591..0000000
+index 3546b73..0000000
 --- a/files/launch/banner.in
 +++ /dev/null
 @@ -1,37 +0,0 @@
@@ -329,7 +328,7 @@ index a240591..0000000
 -        RUNLEVEL=$2
 -        export PREVLEVEL RUNLEVEL
 -    fi
--    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner.sh start
+-    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner start
 -end script
 diff --git a/files/launch/bootmisc.conf.in b/files/launch/bootmisc.conf.in
 new file mode 100755
