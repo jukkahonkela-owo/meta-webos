@@ -8,7 +8,7 @@ SECTION = "webos/base"
 
 DEPENDS = "nyx-lib luna-service2 cjson libxml2 sqlite3 glib-2.0 powerd"
 
-PR = "r3"
+PR = "r4"
 
 inherit webos_component
 inherit webos_public_repo
