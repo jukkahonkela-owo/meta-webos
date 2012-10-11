@@ -1,7 +1,7 @@
-From c62fff4b602b7a9d105e5f9412acc0146c2fbf14 Mon Sep 17 00:00:00 2001
+From 9b1e9a84ed752d8b4475a31412553bb289f52433 Mon Sep 17 00:00:00 2001
 From: Jukka Honkela <jukka.honkela@palm.com>
 Date: Mon, 1 Oct 2012 15:16:12 +0300
-Subject: [PATCH] upstart 1.5 related changes
+Subject: [PATCH 1/2] upstart 1.5 related changes
 
 Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
 ---
@@ -2084,6 +2084,32 @@ index b9a627c..0000000
 -fi
 -
 -end script
+-- 
+1.7.9.5
+
+
+From f6d15ea1f906105b752ed6b3a6d224a6cf1eb98e Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 11 Oct 2012 13:28:20 +0300
+Subject: [PATCH 2/2] upstart 1.5: fixing banner.conf to point internally into
+ correct file
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/banner.conf.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
+index 3546b73..a240591 100755
+--- a/files/launch/banner.conf.in
++++ b/files/launch/banner.conf.in
+@@ -33,5 +33,5 @@ script
+         RUNLEVEL=$2
+         export PREVLEVEL RUNLEVEL
+     fi
+-    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner start
++    @WEBOS_INSTALL_SYSCONFDIR@/init.d/banner.sh start
+ end script
 -- 
 1.7.9.5
 
