@@ -9,11 +9,14 @@ DEPENDS = "dbus udev libnih"
 SRC_URI = "http://upstart.ubuntu.com/download/${PV}/${BPN}-${PV}.tar.gz \
            file://tty1.conf \
            file://tty2.conf \
-           file://dbus-pthread-webos.patch"
+           file://dbus-pthread-webos.patch \
+           file://init/rcS-default \
+           file://init/rc \
+           file://init/rcS"
 SRC_URI[md5sum] = "870920a75f8c13f3a3af4c35916805ac"
 SRC_URI[sha256sum] = "bd42f58e1d0f8047c9af0c5ca94f9e91373b65d7c12ab0e82a5f476acd528407"
 
-PR = "r3"
+PR = "r4"
 
 inherit gettext autotools update-alternatives
 
@@ -29,8 +32,7 @@ FILES_upstart-sysvcompat += " \
     ${base_sbindir}/reboot* ${base_sbindir}/halt* ${base_sbindir}/poweroff* \
     ${base_sbindir}/shutdown* ${base_sbindir}/telinit ${base_sbindir}/runlevel \
     ${sysconfdir}/init/control-alt-delete.conf \
-    ${sysconfdir}/init/rc* \
-    ${sysconfdir}/init.d \
+    ${sysconfdir}/init.d/rc* \
     ${sysconfdir}/default/rcS \
 "
 
@@ -50,4 +52,10 @@ FILES_${PN}-tools = "${bindir}/init-checkconf ${bindir}/initctl2dot"
 do_install_append () {
     install -d ${D}${sysconfdir}/init
     install -m 0644 ${WORKDIR}/tty?.conf ${D}${sysconfdir}/init
+
+    install -d ${D}${sysconfdir}/init.d
+    install -d ${D}${sysconfdir}/default
+    install -m 0755 ${WORKDIR}/init/rc ${D}${sysconfdir}/init.d
+    install -m 0755 ${WORKDIR}/init/rcS ${D}${sysconfdir}/init.d
+    install -m 0755 ${WORKDIR}/init/rcS-default ${D}${sysconfdir}/default/rcS
 }
