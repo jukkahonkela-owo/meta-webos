@@ -1,7 +1,7 @@
-From 1adc9da17770eceabb7ce3c9065c19859cf22ab7 Mon Sep 17 00:00:00 2001
+From a68f462b8881c85157f63222d21f65ff50331078 Mon Sep 17 00:00:00 2001
 From: Jukka Honkela <jukka.honkela@palm.com>
 Date: Thu, 4 Oct 2012 13:56:06 +0300
-Subject: [PATCH] Upstart 1.5 compatibility changes
+Subject: [PATCH 1/2] Upstart 1.5 compatibility changes
 
 Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
 ---
@@ -21,6 +21,42 @@ index 77fadf1..e01e757 100644
  install(FILES fork_server.js DESTINATION ${WEBOS_INSTALL_WEBOS_PREFIX}/nodejs)
  install(PROGRAMS jslauncher run-js-service DESTINATION ${WEBOS_INSTALL_BINDIR})
  install(FILES bootstrap-node.js palm_bus_config.json sources.json DESTINATION ${WEBOS_INSTALL_WEBOS_SERVICESDIR}/jsservicelauncher)
+-- 
+1.7.9.5
+
+
+From 8a304ea4ac6417c7a790976a11fb02aa2731aec5 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 11 Oct 2012 09:55:38 +0300
+Subject: [PATCH 2/2] removing console logged which no longer works
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ node_fork_server.upstart |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/node_fork_server.upstart b/node_fork_server.upstart
+index 3e76d07..e0c3393 100644
+--- a/node_fork_server.upstart
++++ b/node_fork_server.upstart
+@@ -27,7 +27,7 @@ stop on started start_update
+ normal exit 0
+ respawn
+ 
+-console logged
++console output
+ 
+ script
+ 
+@@ -43,7 +43,7 @@ else
+     touch ${NODE_VAR}/fork
+     export NODE_PATH=/usr/palm/frameworks:/usr/palm/nodejs
+     # Set max heap size to 22 MB (globally for every process forked)
+-    exec /usr/palm/nodejs/node --max_old_space_size=23068672 /usr/palm/nodejs/fork_server.js
++    exec /usr/palm/nodejs/node --max_old_space_size=23068672 /usr/palm/nodejs/fork_server.js | logger -t fork_server
+ fi
+ 
+ end script
 -- 
 1.7.9.5
 

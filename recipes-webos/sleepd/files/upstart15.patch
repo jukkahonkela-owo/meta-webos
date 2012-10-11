@@ -1,7 +1,7 @@
-From 8f6ca70aa240b33b6b02a3baa112f48f9c04254a Mon Sep 17 00:00:00 2001
+From 46af81713e42b9e785a826e93d56e0eb421cb534 Mon Sep 17 00:00:00 2001
 From: Jukka Honkela <jukka.honkela@palm.com>
 Date: Thu, 4 Oct 2012 14:25:28 +0300
-Subject: [PATCH] Upstart 1.5 compatibility changes
+Subject: [PATCH 1/2] Upstart 1.5 compatibility changes
 
 Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
 ---
@@ -113,6 +113,30 @@ index eb13fc1..0000000
 -    
 -service
 -exec @WEBOS_INSTALL_SBINDIR@/sleepd
+-- 
+1.7.9.5
+
+
+From 97f9cc1fc1e6c2148d5b224604e4191f46adcc88 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 11 Oct 2012 10:26:48 +0300
+Subject: [PATCH 2/2] removing service stanza
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/sleepd.conf.in |    1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/files/launch/sleepd.conf.in b/files/launch/sleepd.conf.in
+index eb13fc1..965abc9 100644
+--- a/files/launch/sleepd.conf.in
++++ b/files/launch/sleepd.conf.in
+@@ -41,5 +41,4 @@ pre-start script
+     fi
+ end script
+     
+-service
+ exec @WEBOS_INSTALL_SBINDIR@/sleepd
 -- 
 1.7.9.5
 

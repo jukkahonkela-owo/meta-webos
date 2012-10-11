@@ -1,7 +1,7 @@
-From c794c91cc1daca1577d00491ff3b52bc38cd2b5c Mon Sep 17 00:00:00 2001
+From f1ec474af7417605368a0521b027a71379a6da63 Mon Sep 17 00:00:00 2001
 From: Jukka Honkela <jukka.honkela@palm.com>
 Date: Thu, 4 Oct 2012 15:40:28 +0300
-Subject: [PATCH] Upstart 1.5 compatibility changes
+Subject: [PATCH 1/2] Upstart 1.5 compatibility changes
 
 Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
 ---
@@ -181,6 +181,32 @@ index 7fa2978..0000000
 -	logger -s "Configuring activities"
 -	@WEBOS_INSTALL_BINDIR@/luna-send -n 1 palm://com.palm.configurator/run '{"types":["activities"]}'
 -end script
+-- 
+1.7.9.5
+
+
+From 1a7adc012650da99f5a69fa9151e1acc0cf37f76 Mon Sep 17 00:00:00 2001
+From: Jukka Honkela <jukka.honkela@palm.com>
+Date: Thu, 11 Oct 2012 09:39:53 +0300
+Subject: [PATCH 2/2] removing service stanza
+
+Open-webOS-DCO-1.0-Signed-off-by: Jukka Honkela <jukka.honkela@palm.com>
+---
+ files/launch/configurator-async.conf.in |    1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/files/launch/configurator-async.conf.in b/files/launch/configurator-async.conf.in
+index 35ccf92..ebddbf8 100644
+--- a/files/launch/configurator-async.conf.in
++++ b/files/launch/configurator-async.conf.in
+@@ -5,7 +5,6 @@ start on activitymanager-ready
+ # Need to make sure that AM doesn't hang when it emits it's upstart signal
+ # This is actually not safe, as it can cause upstart to eat the events.
+ # The Activity Manager will call the configurator directly.
+-service
+ 
+ # The file cache & db kinds need to be configured first
+ script
 -- 
 1.7.9.5
 
