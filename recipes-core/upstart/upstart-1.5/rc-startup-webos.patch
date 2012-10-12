@@ -1,0 +1,12 @@
+diff -pru orig-upstart-1.5/conf/rc-sysinit.conf upstart-1.5/conf/rc-sysinit.conf
+--- orig-upstart-1.5/conf/rc-sysinit.conf	2012-10-12 15:06:50.552508932 +0300
++++ upstart-1.5/conf/rc-sysinit.conf	2012-10-12 15:10:49.989982248 +0300
+@@ -6,7 +6,7 @@
+ description	"System V initialisation compatibility"
+ author		"Scott James Remnant <scott@netsplit.com>"
+ 
+-start on startup
++start on stopped finish
+ stop on runlevel
+ 
+ # Default runlevel, this may be overriden on the kernel command-line

@@ -2113,3 +2113,23 @@ index 3546b73..a240591 100755
 -- 
 1.7.9.5
 
+From 868816ce17bf1197892ead5c456076da4921a74a Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Fri, 12 Oct 2012 15:09:09 +0300
+Subject: [PATCH] banner: Start on startup
+
+Signed-off-by: Timo Aarnipuro <timo.aarnipuro@palm.com>
+
+diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
+index a240591..874e19b 100755
+--- a/files/launch/banner.conf.in
++++ b/files/launch/banner.conf.in
+@@ -18,7 +18,7 @@
+ 
+ # -*- mode: shell-script; -*-
+ 
+-start on runlevel 2
++start on startup
+ 
+ console output
+ 
