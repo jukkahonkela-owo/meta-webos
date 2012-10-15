@@ -2133,3 +2133,120 @@ index a240591..874e19b 100755
  
  console output
  
+From 44939f78b3da5cd64a32bdf667770418809088fd Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Mon, 15 Oct 2012 10:58:09 +0300
+Subject: [PATCH] Remove tokens.conf since there is no such binary as
+ /sbin/tokens
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d4eac72..4b893b5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,7 +46,6 @@ set(configurelist
+      files/launch/start_update.conf
+      files/launch/sysfs.conf
+      files/launch/timezone.conf
+-     files/launch/tokens.conf
+      files/launch/udev.conf
+      files/launch/urandom.conf
+      files/launch/usbctrl.conf)
+diff --git a/files/launch/populate-volatile.conf.in b/files/launch/populate-volatile.conf.in
+index 332082f..587e5c5 100755
+--- a/files/launch/populate-volatile.conf.in
++++ b/files/launch/populate-volatile.conf.in
+@@ -18,7 +18,7 @@
+ 
+ # -*- mode: shell-script; -*-
+ 
+-start on stopped tokens
++start on stopped mountall
+ 
+ script
+    @WEBOS_INSTALL_SYSCONFDIR@/init.d/populate-volatile.sh start
+diff --git a/files/launch/tokens.conf.in b/files/launch/tokens.conf.in
+deleted file mode 100644
+index d6141eb..0000000
+--- a/files/launch/tokens.conf.in
++++ /dev/null
+@@ -1,25 +0,0 @@
+-# @@@LICENSE
+-#
+-# Copyright (c) 2007-2012 Hewlett-Packard Development Company, L.P.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-# http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-#
+-# LICENSE@@@
+-
+-# -*- mode: shell-script; -*-
+-
+-start on stopped mountall
+-
+-console output
+-
+-exec @WEBOS_INSTALL_BASE_SBINDIR@/tokens --mount
+From 22e809c27c5838ee2fcb56e5cfcec6766b393a89 Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Mon, 15 Oct 2012 11:02:45 +0300
+Subject: [PATCH] banner: Do not try to set runlevel
+
+There is no --set option in runlevel utility
+
+diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
+index 874e19b..a90edec 100755
+--- a/files/launch/banner.conf.in
++++ b/files/launch/banner.conf.in
+@@ -24,10 +24,6 @@ console output
+ 
+ script
+     set $(runlevel || true)
+-    if [ "$2" != "2" ]; then
+-        set $(runlevel --set 2 || true)
+-    fi
+-
+     if [ "$1" != "unknown" ]; then
+         PREVLEVEL=$1
+         RUNLEVEL=$2
+From cf11a41b84acc78149ef5c17e9283c5dcaecd761 Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Mon, 15 Oct 2012 11:26:52 +0300
+Subject: [PATCH] Mount devpts first
+
+
+diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
+index a90edec..504643c 100755
+--- a/files/launch/banner.conf.in
++++ b/files/launch/banner.conf.in
+@@ -18,7 +18,7 @@
+ 
+ # -*- mode: shell-script; -*-
+ 
+-start on startup
++start on stopped devpts
+ 
+ console output
+ 
+diff --git a/files/launch/devpts.conf.in b/files/launch/devpts.conf.in
+index 31057db..636d744 100755
+--- a/files/launch/devpts.conf.in
++++ b/files/launch/devpts.conf.in
+@@ -18,7 +18,7 @@
+ 
+ # -*- mode: shell-script; -*-
+ 
+-start on stopped populate-volatile
++start on startup
+ 
+ console output
+ 
