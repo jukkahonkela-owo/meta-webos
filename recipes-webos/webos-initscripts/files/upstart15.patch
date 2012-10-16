@@ -2250,3 +2250,61 @@ index 31057db..636d744 100755
  
  console output
  
+From ff0ee863821368b41d53ac87157cb2da347c1666 Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Tue, 16 Oct 2012 13:11:55 +0300
+Subject: [PATCH] mountall: Do not try to create /var/tmp
+
+WEBOS_INSTALL_PRESERVEDTMPDIR points to /var/tmp, which is currently
+linked to /var/volatile.
+
+diff --git a/files/launch/mountall.conf.in b/files/launch/mountall.conf.in
+index 9a636ca..3e981cb 100755
+--- a/files/launch/mountall.conf.in
++++ b/files/launch/mountall.conf.in
+@@ -35,5 +35,5 @@ post-stop script
+         chmod 777 @WEBOS_INSTALL_LOCALSTATEDIR@/preferences
+     fi
+     mkdir -p @WEBOS_INSTALL_LOCALSTATEDIR@/home/root
+-    mkdir -p @WEBOS_INSTALL_PRESERVEDTMPDIR@
++#    mkdir -p @WEBOS_INSTALL_PRESERVEDTMPDIR@
+ end script
+From d035057876689d0e1527d781586ba35bb0d36be4 Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Tue, 16 Oct 2012 13:13:46 +0300
+Subject: [PATCH] console: Start after running sysvinit scripts
+
+
+diff --git a/files/launch/console.conf.in b/files/launch/console.conf.in
+index daae422..c6da4ba 100755
+--- a/files/launch/console.conf.in
++++ b/files/launch/console.conf.in
+@@ -14,7 +14,7 @@
+ 
+ description	"console"
+ 
+-start on stopped bootmisc
++start on stopped rc-sysinit
+ 
+ pre-start script
+     grep -q 'console=' /proc/cmdline || stop
+From ad90ec46792a289ea07f0c145b2b62a01a4289cc Mon Sep 17 00:00:00 2001
+From: Timo Aarnipuro <timo.aarnipuro@palm.com>
+Date: Tue, 16 Oct 2012 13:25:25 +0300
+Subject: [PATCH] banner: Create utmp before trying to use runlevel
+
+
+diff --git a/files/launch/banner.conf.in b/files/launch/banner.conf.in
+index 504643c..26d5486 100755
+--- a/files/launch/banner.conf.in
++++ b/files/launch/banner.conf.in
+@@ -23,6 +23,9 @@ start on stopped devpts
+ console output
+ 
+ script
++    : > "/var/run/utmp"
++    chmod 664 "/var/run/utmp"
++
+     set $(runlevel || true)
+     if [ "$1" != "unknown" ]; then
+         PREVLEVEL=$1
