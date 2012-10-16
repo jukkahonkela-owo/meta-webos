@@ -40,7 +40,7 @@ index 0000000..b50a860
 +
 +description	"@WEBOS_PROJECT_SUMMARY@"
 +
-+start on stopped hostname
++start on stopped populate-volatile
 +
 +#stop on runlevel [!2]
 +
