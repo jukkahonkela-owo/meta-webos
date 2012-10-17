@@ -7,7 +7,7 @@ SECTION = "webos/services"
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-PR = "r3"
+PR = "r4"
 
 #inherit webos_component
 #inherit webos_public_repo

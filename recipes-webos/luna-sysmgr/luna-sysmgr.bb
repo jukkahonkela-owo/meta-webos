@@ -14,7 +14,7 @@ RDEPENDS_${PN} = "ptmalloc3"
 RDEPENDS_${PN} += "util-linux"
 #RDEPENDS_${PN} += "jail" #TODO
 
-PR = "r3"
+PR = "r4"
 
 # Don't uncomment until all of the do_*() tasks have been moved out of the recipe
 #inherit webos_component
